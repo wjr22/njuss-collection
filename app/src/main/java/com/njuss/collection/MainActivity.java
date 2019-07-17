@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         mBtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,gerenzhongxinActivity.class);
+                Intent intent = new Intent(MainActivity.this, personalcenterActivity.class);
                 startActivity(intent);
             }
         });
