@@ -1,13 +1,15 @@
-package com.njuss.collection.service;
+package com.njuss.collection.base;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.njuss.collection.beans.GridConductor;
 import com.njuss.collection.beans.Store;
 import com.njuss.collection.tools.DBHelper;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.locks.Condition;
 
 /**
  * 单例类，用来控制用户唯一性
@@ -32,8 +34,16 @@ public class User {
         unfinished = new LinkedHashMap<>();
     }
 
-    public void setMap(){
-
+    public void setMap(Context context){
+        DBHelper dbHelper = new DBHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor cursor = db.query("tStores",null, "conductorID=?", new String[]{conductor.getConductorID().toString()},null,null,null);
+        if(cursor.moveToFirst()){
+            while(!cursor.isLast()){
+                cursor.getColumnNames();
+                cursor.moveToNext();
+            }
+        }
     }
 
     public static User getInstance(){

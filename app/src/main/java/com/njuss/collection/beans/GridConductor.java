@@ -13,7 +13,7 @@ public class GridConductor {
     private String      conductorMobile;
     private String      conductorName;
     private String      conductorPwd;
-    private String      districtID;
+    private String      DistrictCode;
 
     public Integer getConductorID() {
         return conductorID;
@@ -47,12 +47,12 @@ public class GridConductor {
         this.conductorPwd = conductorPwd;
     }
 
-    public String getDistrictID() {
-        return districtID;
+    public String getDistrictCode() {
+        return DistrictCode;
     }
 
-    public void setDistrictID(String districtID) {
-        this.districtID = districtID;
+    public void setDistrictCode(String DistrictCode) {
+        this.DistrictCode = DistrictCode;
     }
 
     @Override
@@ -75,7 +75,7 @@ public class GridConductor {
                 ", conductorMobile='" + conductorMobile + '\'' +
                 ", conductorName='" + conductorName + '\'' +
                 ", conductorPwd='" + conductorPwd + '\'' +
-                ", districtID='" + districtID + '\'' +
+                ", DistrictCode='" + DistrictCode + '\'' +
                 '}';
     }
 }
