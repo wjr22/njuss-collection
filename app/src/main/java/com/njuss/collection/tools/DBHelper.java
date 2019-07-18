@@ -3,6 +3,11 @@ package com.njuss.collection.tools;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import java.io.IOException;
+import java.io.InputStream;
+
 
 /**
  * SQLite DataBase 创建与更新类
@@ -18,7 +23,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //数据库名称
     private static final String DATABASE_NAME="dbTobacco";
-
 
     public DBHelper(Context context){
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
@@ -56,6 +60,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 "storePicL TEXT," +
                 "storePicR TEXT)";
         db.execSQL(CREATE_TABLE_STORES);
+        Log.d("DB Operate ==", "CREATE DATABASE dbTobacco Success! and Created three tables.========");
+
+        UploadData up = new UploadData.Builder().setDBHelper(this).setDB(db).build();
+        up.dataInit();
     }
 
     @Override
@@ -66,5 +74,26 @@ public class DBHelper extends SQLiteOpenHelper {
         //再次创建表
         onCreate(db);
     }
+
+    /*
+    private void importSheet() {
+        try {
+            // 1
+            InputStream is = getResources().getAssets().open("vipdb.xls");
+            // 2
+            Workbook book = Workbook.getWorkbook(is);
+            // 3
+            Sheet sheet = book.getSheet(0);
+            // 4
+            for (int j = 0; j < sheet.getRows(); ++j) {
+                // 5
+                initDataInfo(sheet.getCell(0, j).getContents(), sheet.getCell(1, j).getContents());
+            }
+            book.close();
+        } catch (IOException | BiffException e) {
+            e.printStackTrace();
+        }
+
+    }*/
 }
 

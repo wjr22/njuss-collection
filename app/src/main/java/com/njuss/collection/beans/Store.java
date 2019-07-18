@@ -10,6 +10,12 @@ import java.util.Objects;
  * @see GridConductor
  */
 public class Store {
+
+    public final static String[] names = {"licenseID",
+            "conductorID", "storeName", "storeAddress", "GPSAddress",
+            "GPSLongitude", "GPSLatitude", "storePicM", "storePicL",
+            "storePicR", "licensePic"};
+
     private String      licenseID;
     private Integer     conductorID;    //foreign key
     private String      storeName;
@@ -21,6 +27,7 @@ public class Store {
     private String      storePicL;
     private String      storePicR;
     private String      licensePic;
+    private Integer     complete;       //完成度，照片
 
     public String getLicenseID() {
         return licenseID;
@@ -133,5 +140,13 @@ public class Store {
                 ", GPSLongitude='" + GPSLongitude + '\'' +
                 ", GPSLatitude='" + GPSLatitude + '\'' +
                 '}';
+    }
+
+    public Integer getComplete() {
+        return complete;
+    }
+
+    public void setComplete(Integer complete) {
+        this.complete = complete;
     }
 }

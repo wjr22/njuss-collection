@@ -25,10 +25,5 @@ public class gerenzhongxinActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
-
-
-
     }
 }
