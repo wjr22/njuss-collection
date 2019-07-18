@@ -7,21 +7,21 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class gerenzhongxinActivity extends AppCompatActivity {
+public class PersonalCenterActivity extends AppCompatActivity {
 
-    private Button mBtn_weicaiji;
-    private Button mBtn_yicaiji;
+    private Button mBtn_uncollected;
+    private Button mBtn_collected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gerenzhongxin);
+        setContentView(R.layout.activity_personalcenter);
 
-        mBtn_weicaiji = (Button) findViewById(R.id.bt_weicaiji);
-        mBtn_weicaiji.setOnClickListener(new View.OnClickListener() {
+        mBtn_uncollected = (Button) findViewById(R.id.btn_uncollected);
+        mBtn_uncollected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(gerenzhongxinActivity.this,ListViewActivity.class);
+                Intent intent = new Intent(PersonalCenterActivity.this,ListViewActivity.class);
                 startActivity(intent);
             }
         });

@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.njuss.collection.beans.GridConductor;
 import com.njuss.collection.beans.Store;
+import com.njuss.collection.tools.DBHelper;
 import com.njuss.collection.tools.UploadData;
 
 import java.util.Map;
@@ -21,9 +22,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         Context context = getApplicationContext();
-        UploadData uploadData = new UploadData(context);
-        //uploadData.insertForTest();
-        //uploadData.insertDistrict(context);
+        DBHelper dbHelper = new DBHelper(context);
     }
 
     public void setConductor(GridConductor conductor) {

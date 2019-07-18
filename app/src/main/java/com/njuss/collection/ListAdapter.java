@@ -8,11 +8,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MyListAdapter1 extends BaseAdapter {
+public class ListAdapter extends BaseAdapter {
 
     private Context mContext;
     private LayoutInflater mLayoutInflater;
-    public MyListAdapter1(Context context){
+    public ListAdapter(Context context){
         this.mContext=context;
         mLayoutInflater = LayoutInflater.from(context);
     }

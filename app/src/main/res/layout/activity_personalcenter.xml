@@ -61,7 +61,7 @@
 
 
         <Button
-            android:id="@+id/bt_weicaiji"
+            android:id="@+id/btn_uncollected"
             android:background="@drawable/btn_login"
             android:textColor="#FFFFFF"
             android:textSize="20sp"
@@ -74,7 +74,7 @@
             />
 
         <Button
-            android:id="@+id/bt_yicaiji"
+            android:id="@+id/btn_collected"
             android:background="@drawable/btn_login"
             android:textColor="#FFFFFF"
             android:textSize="20sp"

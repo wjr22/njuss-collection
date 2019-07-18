@@ -24,8 +24,11 @@ public class DBHelper extends SQLiteOpenHelper {
     //数据库名称
     private static final String DATABASE_NAME="dbTobacco";
 
+    private Context con;
+
     public DBHelper(Context context){
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
+        con = context;
     }
 
     @Override
@@ -61,8 +64,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "storePicR TEXT)";
         db.execSQL(CREATE_TABLE_STORES);
         Log.d("DB Operate ==", "CREATE DATABASE dbTobacco Success! and Created three tables.========");
-
-        UploadData up = new UploadData.Builder().setDBHelper(this).setDB(db).build();
+        UploadData up = new UploadData.Builder().setDBHelper(this).setDB(db).setContext(con).build();
         up.dataInit();
     }
 

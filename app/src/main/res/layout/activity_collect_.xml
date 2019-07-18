@@ -70,7 +70,7 @@
                 android:minLines="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="7sp" />
+                android:textSize="8sp" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -96,7 +96,7 @@
                 android:minLines="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="7sp" />
+                android:textSize="8sp" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -114,7 +114,7 @@
                 android:textSize="15sp" />
 
             <EditText
-                android:id="@+id/et_storeAddress"
+                android:id="@+id/et_GPSAddress"
                 android:gravity="center"
                 android:text=""
                 android:focusable="false"
@@ -140,7 +140,7 @@
                 android:textSize="15sp" />
 
             <EditText
-                android:id="@+id/et_A"
+                android:id="@+id/et_storeAddress"
                 android:gravity="center"
                 android:text=""
                 android:focusable="false"
@@ -148,7 +148,7 @@
                 android:minLines="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="7sp" />
+                android:textSize="8sp" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -174,16 +174,16 @@
                 android:minLines="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="7sp" />
+                android:textSize="8sp" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp">
+            >
 
             <TextView
+                android:layout_marginLeft="5dp"
                 android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -191,16 +191,32 @@
                 android:textColor="@color/colorBlack"
                 android:textSize="15sp" />
 
-            <EditText
-                android:id="@+id/et_GPSAddress"
-                android:gravity="center"
-                android:text=""
-                android:focusable="false"
-                android:inputType="textMultiLine"
-                android:minLines="1"
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="7sp" />
+                android:layout_height="match_parent">
+                <EditText
+                    android:id="@+id/et_GPSLongitude"
+                    android:gravity="center"
+                    android:text=""
+                    android:focusable="false"
+                    android:inputType="textMultiLine"
+                    android:minLines="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="8sp" />
+                <EditText
+                    android:id="@+id/et_GPSLatitude"
+                    android:gravity="center"
+                    android:text=""
+                    android:focusable="false"
+                    android:inputType="textMultiLine"
+                    android:minLines="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="8sp" />
+
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
@@ -389,31 +405,53 @@
         </LinearLayout>
         <LinearLayout
             android:orientation="horizontal"
-            android:padding="5dp"
+            android:padding="1dp"
             android:layout_width="match_parent"
             android:layout_height="80dp">
             <ImageButton
-                android:id="@+id/btn_mic"
-                android:src="@mipmap/img_btn_mic"
-                android:background="@drawable/btn_mic"
-                android:layout_width="70dp"
+
+                android:layout_margin="4dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginLeft="2dp"
+                android:background="@drawable/btn_photo_rectangle"
+                android:layout_weight="1"
+                android:id="@+id/btn_startrecord"
+                android:src="@mipmap/img_btn_startrecord"
+
+                android:layout_width="wrap_content"
                 android:layout_height="70dp"/>
 
-            <FrameLayout
-                android:id="@+id/fl_waveform"
+            <ImageButton
+                android:layout_margin="4dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginLeft="2dp"
+                android:background="@drawable/btn_photo_rectangle"
                 android:layout_weight="1"
+                android:id="@+id/btn_stoprecord"
+                android:src="@mipmap/img_btn_stoprecord"
+
                 android:layout_width="wrap_content"
-                android:layout_height="70dp">
-
-
-            </FrameLayout>
-
+                android:layout_height="70dp" />
+            <ImageButton
+                android:layout_margin="4dp"
+                android:src="@mipmap/img_btn_startplay"
+                android:layout_marginRight="2dp"
+                android:layout_marginLeft="2dp"
+                android:background="@drawable/btn_photo_rectangle"
+                android:layout_weight="1"
+                android:id="@+id/btn_startplay"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp" />
 
             <ImageButton
-                android:id="@+id/btn_start"
-                android:src="@mipmap/img_btn_start"
-                android:background="#ffffff"
-                android:layout_width="70dp"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:id="@+id/btn_stopplay"
+                android:src="@mipmap/img_btn_stopplay"
+                android:layout_marginRight="2dp"
+                android:layout_marginLeft="2dp"
+                android:background="@drawable/btn_photo_rectangle"
+                android:layout_width="wrap_content"
                 android:layout_height="70dp" />
 
         </LinearLayout>
