@@ -12,7 +12,7 @@ public class ListViewActivity extends Activity {
         setContentView(R.layout.activity_listview);
 
         mLv1_1 = (ListView) findViewById(R.id.Lv1_1);
-        mLv1_1.setAdapter(new MyListAdapter1(ListViewActivity.this));
+        mLv1_1.setAdapter(new ListAdapter(ListViewActivity.this));
 
 
     }

@@ -23,6 +23,8 @@ public class User {
 
     private static User instance = null;
 
+    private static Context context;             //上下文信息
+
     private static GridConductor conductor = null;
 
     private static Map<String, Store> finished ;

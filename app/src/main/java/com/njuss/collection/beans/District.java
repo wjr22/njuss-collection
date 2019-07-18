@@ -8,18 +8,22 @@ import java.util.Objects;
  * @
  */
 public class District {
-    private Integer     distictLevel;
+
+    public final static String[] names = {"districtLevel", "districtCode", "districtName",
+    "parentCode", "districtFullname"};
+
+    private Integer     districtLevel;
     private String      districtCode;
     private String      districtName;
     private String      parentCode;
     private String      districtFullname;
 
-    public Integer getDistictLevel() {
-        return distictLevel;
+    public Integer getdistrictLevel() {
+        return districtLevel;
     }
 
-    public void setDistictLevel(Integer distictLevel) {
-        this.distictLevel = distictLevel;
+    public void setdistrictLevel(Integer districtLevel) {
+        this.districtLevel = districtLevel;
     }
 
     public String getDistrictCode() {

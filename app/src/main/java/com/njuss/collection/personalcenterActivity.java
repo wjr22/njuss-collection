@@ -7,7 +7,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class personalcenterActivity extends AppCompatActivity {
+public class PersonalCenterActivity extends AppCompatActivity {
 
     private Button mBtn_uncollected;
     private Button mBtn_collected;
@@ -21,15 +21,9 @@ public class personalcenterActivity extends AppCompatActivity {
         mBtn_uncollected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(personalcenterActivity.this,ListViewActivity.class);
+                Intent intent = new Intent(PersonalCenterActivity.this,ListViewActivity.class);
                 startActivity(intent);
             }
         });
-
-
-
-
-
-
     }
 }

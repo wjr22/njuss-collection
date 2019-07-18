@@ -9,6 +9,10 @@ import java.util.Objects;
  * @since 1.0
  */
 public class GridConductor {
+
+    public final static String[] names = {"conductorID", "conductorMobile", "conductorName",
+    "conductorPwd", "districtCode"};
+
     private Integer     conductorID;
     private String      conductorMobile;
     private String      conductorName;

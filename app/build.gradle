@@ -10,6 +10,17 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    dexOptions {
+        //incremental = true;
+        preDexLibraries = false
+        javaMaxHeapSize "4g"
+    }
+
+    packagingOptions {
+        exclude 'META-INF/NOTICE.txt' // will not include NOTICE file
+        exclude 'META-INF/LICENSE.txt' // will not include LICENSE file
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -35,5 +46,4 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation 'org.jetbrains:annotations-java5:15.0'
-
 }
