@@ -24,14 +24,23 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
-    <application android:name=".App" android:allowBackup="true" android:icon="@mipmap/ic_launcher" android:label="@string/app_name" android:roundIcon="@mipmap/ic_launcher_round" android:supportsRtl="true" android:theme="@style/AppTheme">
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value=" 9ea0f794331427a0576f6c137ec2a7ca" />
         <activity android:name=".TabHostActivity"/>
         <activity android:name=".LocationActivity"/>
-        <meta-data android:name="com.amap.api.v2.apikey" android:value=" 9ea0f794331427a0576f6c137ec2a7ca" />
-
-        <activity android:name=".CollectActivity" />
+        <activity android:name=".MainActivity" />
         <activity android:name=".PersonalCenterActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".CollectActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

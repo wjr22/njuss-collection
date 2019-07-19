@@ -13,7 +13,5 @@ public class ListViewActivity extends Activity {
 
         mLv1_1 = (ListView) findViewById(R.id.Lv1_1);
         mLv1_1.setAdapter(new ListAdapter(ListViewActivity.this));
-
-
     }
 }
