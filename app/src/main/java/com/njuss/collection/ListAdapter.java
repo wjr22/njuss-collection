@@ -30,11 +30,11 @@ public class ListAdapter extends BaseAdapter {
     public long getItemId(int i) {
         return 0;
     }
-static class ViewHolder{
+    static class ViewHolder{
         public ImageView imageView;
         public TextView tvTitle,tvTime,tvContent;
 
-}
+    }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;

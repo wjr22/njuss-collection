@@ -6,9 +6,7 @@ import android.content.res.AssetManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.njuss.collection.R;
 import com.njuss.collection.beans.District;
-import com.njuss.collection.tools.DBHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,6 +36,9 @@ public class UploadData {
         this.db = builder.db;
     }
 
+    /**
+     * 测试用例
+     */
     public void insertForTest(){
 
 
@@ -62,7 +63,7 @@ public class UploadData {
         try {
             AssetManager asm = context.getAssets();
             InputStream in = asm.open("district.xlsx");
-            List<String[]> ls = POIUtil.readExcel("district.xlsx", in);
+            List<String[]> ls = FileUtil.readExcel("district.xlsx", in);
             Log.d("DB Operate -- ", "in insertDistrict " + ls.size());
             for (int i=1; i<ls.size(); i++){
                 ContentValues cv = new ContentValues();
@@ -78,10 +79,15 @@ public class UploadData {
         }
     }
 
+
+
     public void dataInit(){
         insertDistrict(this.context);
     }
 
+    /**
+     * @TODO 导出数据到excel中
+     */
     public void exportToExcel(){
 
     }

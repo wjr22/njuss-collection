@@ -7,6 +7,9 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * 个人中心
+ */
 public class PersonalCenterActivity extends AppCompatActivity {
 
     private Button mBtn_uncollected;
