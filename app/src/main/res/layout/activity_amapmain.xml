@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    		<!-- Title -->
+			<RelativeLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="@dimen/title_height"
+		        android:background="@color/black" >
+		
+		        <ImageView
+		            android:id="@+id/button_back"
+		            android:layout_width="@dimen/title_height_46"
+		            android:layout_height="@dimen/title_height_46"
+		            android:layout_alignParentLeft="true"
+		            android:layout_centerInParent="true"
+		            android:gravity="center"
+		            android:padding="11dp"
+		            android:scaleType="centerInside"
+		            android:visibility="gone"
+		            android:src="@drawable/back_arrow" />
+		
+		        <TextView
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_centerInParent="true"
+		            android:text="数据采集"
+		            android:textColor="@color/white"
+		            android:textSize="@dimen/title_textsize" />
+		
+		        <TextView
+		            android:id="@+id/button_save"
+		            android:layout_width="wrap_content"
+		            android:layout_height="@dimen/title_height"
+		            android:layout_alignParentRight="true"
+		            android:layout_marginRight="10dp"
+		            android:gravity="center"
+		            android:paddingLeft="10dp"
+		            android:paddingRight="10dp"
+		            android:text="保存"
+		            android:visibility="gone"
+		            android:textColor="@color/white"
+		            android:textSize="18sp" />
+		    </RelativeLayout>
+    
+		    <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+		        
+		    		<!-- 地图 -->
+					<com.amap.api.maps.MapView 
+					    android:id="@+id/amapView" 
+					    android:layout_width="match_parent" 
+					    android:layout_height="match_parent">
+					</com.amap.api.maps.MapView>
+					
+					<ImageView
+		                android:id="@+id/mapcross"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:layout_centerInParent="true"
+		                android:background="@drawable/nowpos" >
+		            </ImageView>
+		            
+					<LinearLayout 
+					    android:id="@+id/gpsData_layout"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:layout_alignParentRight="true"
+		                android:layout_above="@+id/sensorData"
+		                android:layout_toLeftOf="@+id/gpsData"
+		                android:layout_marginBottom="12dp"
+		                android:layout_marginRight="55dp"
+		                android:padding="6dp"
+		                android:visibility="gone"
+		                android:background="@drawable/map_layer_bg"
+		                android:orientation="horizontal" >
+	                
+		                <TextView
+		                    android:id="@+id/state_text_gps"
+		                    android:layout_width="wrap_content"
+		                    android:layout_height="wrap_content"
+		                    android:layout_gravity="center_vertical"
+		                    android:gravity="center"
+		                    android:text=""
+		                    android:textColor="@color/gray_normal"
+		                    android:textSize="14sp" />
+		                
+		                <TextView
+		                    android:id="@+id/location_type"
+		                    android:layout_width="wrap_content"
+		                    android:layout_height="wrap_content"
+		                    android:layout_marginLeft="20dp"
+		                    android:layout_gravity="center_vertical"
+		                    android:gravity="center"
+		                    android:text=""
+		                    android:textColor="@color/gray_normal"
+		                    android:textSize="14sp" />
+	                </LinearLayout>
+					
+					<ImageView
+		                android:id="@+id/gpsData"
+		                android:layout_width="35dp"
+		                android:layout_height="35dp"
+		                android:layout_above="@+id/sensorData"
+		                android:layout_alignParentRight="true"
+		                android:layout_marginRight="10dp"
+		                android:layout_marginBottom="10dp"
+		                android:background="@drawable/map_gps_ok" >
+		            </ImageView>
+		            
+					<ImageView
+		                android:id="@+id/sensorData"
+		                android:layout_width="35dp"
+		                android:layout_height="35dp"
+		                android:layout_centerVertical="true"
+		                android:layout_alignParentRight="true"
+		                android:layout_marginRight="10dp"
+		                android:background="@drawable/map_sensor" >
+		            </ImageView>
+		            
+					<ImageView
+		                android:id="@+id/mediaData"
+		                android:layout_width="40dp"
+		                android:layout_height="40dp"
+		                android:layout_below="@+id/sensorData"
+		                android:layout_alignParentRight="true"
+		                android:layout_marginRight="10dp"
+		                android:layout_marginTop="10dp"
+		                android:background="@drawable/map_photo" >
+		            </ImageView>
+		            
+					<ImageView
+		                android:id="@+id/cellInfo"
+		                android:layout_width="40dp"
+		                android:layout_height="40dp"
+		                android:layout_below="@+id/mediaData"
+		                android:layout_alignParentRight="true"
+		                android:layout_marginRight="10dp"
+		                android:layout_marginTop="10dp"
+		                android:background="@drawable/map_cellinfo" >
+		            </ImageView>
+		            
+					<ImageView
+		                android:id="@+id/dingwei"
+		                android:layout_width="38dp"
+		                android:layout_height="38dp"
+		                android:layout_alignParentBottom="true"
+		                android:layout_alignParentLeft="true"
+		                android:layout_marginLeft="8dp"
+		                android:layout_marginBottom="50dp"
+		                android:background="@drawable/dingwei" >
+		            </ImageView>
+		            
+					<ImageView
+		                android:id="@+id/compass"
+		                android:layout_width="38dp"
+		                android:layout_height="38dp"
+		                android:layout_alignParentLeft="true"
+		                android:layout_marginLeft="8dp"
+		                android:layout_marginBottom="10dp"
+		                android:layout_above="@+id/dingwei"
+		                android:background="@drawable/compass" >
+		            </ImageView>
+			
+					<!-- 上方文字栏 -->
+		            <LinearLayout 
+		                	android:id="@+id/gps_info_layout"
+					        android:layout_width="wrap_content"
+					        android:layout_height="wrap_content"
+					        android:background="@drawable/map_layer_bg"
+					        android:layout_alignParentTop="true"
+					        android:layout_centerHorizontal="true"
+					        android:gravity="center_vertical"
+					        android:orientation="vertical"
+					        android:layout_marginTop="10dp"
+					        android:padding="10dp"   >
+		                
+		                <TextView
+		                    android:id="@+id/posinfo"
+					        android:layout_width="wrap_content"
+					        android:layout_height="wrap_content"
+					        android:gravity="center"
+					        android:text="坐标："
+					        android:textColor="@color/gray_normal"
+					        android:textSize="14sp" />
+		                
+		                <TextView
+		                    android:id="@+id/headinfo"
+					        android:layout_width="wrap_content"
+					        android:layout_height="wrap_content"
+					        android:gravity="center"
+					        android:text="姿态："
+					        android:textColor="@color/gray_normal"
+					        android:textSize="14sp" />
+		                
+		                <TextView
+		                    android:id="@+id/otherinfo"
+					        android:layout_width="wrap_content"
+					        android:layout_height="wrap_content"
+					        android:gravity="center"
+					        android:text="光照："
+					        android:textColor="@color/gray_normal"
+					        android:textSize="14sp" />
+		                	     
+				    </LinearLayout>
+				    
+		            <RelativeLayout
+		                android:id="@+id/gpscoor_info"
+		                android:layout_height="wrap_content"
+		                android:layout_width="wrap_content"
+		                android:layout_below="@+id/gps_info_layout"
+		                android:layout_marginBottom="20dp"
+		                android:layout_marginRight="20dp"
+		                android:gravity="right" >
+		                
+		                <LinearLayout
+			                android:layout_width="wrap_content"
+			                android:layout_height="wrap_content"
+			                android:background="@drawable/map_layer_bg"
+			                android:gravity="center_vertical"
+			                android:padding="5dp"
+			                android:layout_marginLeft="5dp"
+			                android:layout_marginTop="5dp"
+			                android:orientation="vertical" >
+			                
+		                    <TextView
+			                    android:id="@+id/mapgps"
+						        android:layout_width="wrap_content"
+						        android:layout_height="wrap_content"
+						        android:gravity="left"
+						        android:text=""
+						        android:visibility="gone"
+						        android:textColor="@color/gray_normal"
+						        android:textSize="14sp" />
+		                    
+		                    <TextView
+			                    android:id="@+id/poiname"
+						        android:layout_width="wrap_content"
+						        android:layout_height="wrap_content"
+						        android:gravity="left"
+						        android:text=""
+						        android:textColor="@color/gray_normal"
+						        android:textSize="14sp" />
+			                
+			                <TextView
+			                    android:id="@+id/addressname"
+						        android:layout_width="wrap_content"
+						        android:layout_height="wrap_content"
+						        android:gravity="left"
+						        android:text=""
+						        android:textColor="@color/gray_normal"
+						        android:textSize="14sp" />
+		                    
+		                 </LinearLayout>
+		                
+		            </RelativeLayout>
+			    
+	            	<!-- 下方工具栏 -->
+		            <LinearLayout
+		                android:id="@+id/toolbar"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:layout_alignParentBottom="true"
+		                android:layout_centerHorizontal="true"
+		                android:orientation="horizontal"
+		                android:layout_marginBottom="10dp" >
+		                
+		            	<Button
+			                android:id="@+id/button_collect"
+			                android:layout_width="80dp"
+			                android:layout_height="80dp"
+			                android:layout_marginTop="10dp"
+			                android:layout_marginBottom="10dp"
+			                android:background="@drawable/circle_common_green_btn_bg"
+			                android:layout_gravity="center_horizontal"
+			                android:gravity="center"
+			                android:text="开始采集"
+			                android:textColor="#ffffff"
+			                android:textSize="14sp" />
+		                
+		            </LinearLayout>
+			</RelativeLayout>
+	
+</LinearLayout>
