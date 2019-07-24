@@ -1,14 +1,7 @@
 package com.njuss.collection;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.widget.ListView;
-
 import android.content.Context;
-
 import android.os.Bundle;
-
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.List;
 
 
-public class ListViewActivity extends AppCompatActivity {
+public class ListViewActivityr extends AppCompatActivity {
     private List<store> data;
     private MyBaseAdapt mba;//自定义适配器
     private ListView lv;
@@ -29,8 +22,8 @@ public class ListViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        lv = findViewById(R.id.list_view);
+        setContentView(R.layout.tab2);
+        lv = findViewById(R.id.list_view2);
 
         //1.数据准备
         data = new storeDao().list();

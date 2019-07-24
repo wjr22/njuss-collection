@@ -1,52 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp"
-    android:paddingBottom="10dp"
-    android:paddingTop="10dp"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
 
-    <ImageView
-        android:id="@+id/iv_1"
 
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:scaleType="centerCrop"
-        android:background="#000000"
-        />
+
     <LinearLayout
-        android:paddingLeft="10dp"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="6"
         android:orientation="vertical"
+        android:padding="10dp" >
 
-        >
-        <TextView
 
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="hello"
-            android:textSize="20sp"
-            android:textColor="@color/colorBlack"/>
-        <TextView
-            android:layout_marginTop="10dp"
-            android:id="@+id/tv_time"
-            android:layout_width="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="店名："
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/tv_listviewitme_storename"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="2019-7-15"
-            android:textSize="20sp"
-            android:textColor="@color/colorGrayDark"/>
-        <TextView
-            android:layout_marginTop="10dp"
-            android:id="@+id/tv_content"
-            android:layout_width="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="地点："
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/tv_listviewitme_address"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text=""
+                android:textColor="#000000" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorGrayDark"
-            android:text="这是内容"
-            android:textSize="18sp"
-            />
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="许可证号："
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/tv_listviewitme_licenseID"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text=""
+                android:textColor="#000000" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="位置："
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/tv_listviewitme_locate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text=""
+                android:textColor="#000000" />
+        </LinearLayout>
+
+
     </LinearLayout>
+
 </LinearLayout>
