@@ -15,8 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * excel读写工具类 */
-public class POIUtil {
+ * 文件读写工具类
+ * 包括excel读写，照片读写，音视频读写
+ * @author wangj
+ * 参照github完成
+ *
+ * */
+public class FileUtil {
     private final static String xls = "xls";
     private final static String xlsx = "xlsx";
 
@@ -73,7 +78,7 @@ public class POIUtil {
      * @param is    文件输入流
      * @return Workbook
      */
-    public static Workbook getWorkBook(String fileName, InputStream is) {
+    private static Workbook getWorkBook(String fileName, InputStream is) {
         //创建Workbook工作薄对象，表示整个excel
         Workbook workbook = null;
         try {
@@ -90,7 +95,7 @@ public class POIUtil {
         return workbook;
     }
 
-    public static String getCellValue(Cell cell){
+    private static String getCellValue(Cell cell){
         String cellValue = "";
         if(cell == null){
             return cellValue;
@@ -125,4 +130,10 @@ public class POIUtil {
         }
         return cellValue;
     }
+
+    public String savedFileIntoSD(File file, String targetName, String targetPath){
+
+        return targetName;
+    }
+
 }

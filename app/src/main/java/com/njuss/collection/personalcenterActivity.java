@@ -7,7 +7,14 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+<<<<<<< HEAD
 public class personalcenterActivity extends AppCompatActivity {
+=======
+/**
+ * 个人中心
+ */
+public class PersonalCenterActivity extends AppCompatActivity {
+>>>>>>> 5f8e6d1cbdae41efcf9d7571def145e34a352e4b
 
     private Button mBtn_uncollected;
     private Button mBtn_collected;

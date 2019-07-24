@@ -86,6 +86,7 @@ public class ListViewActivity extends AppCompatActivity {
                 v.setTag(vh);
             }
 
+<<<<<<< HEAD
             ViewHolder vh = (ViewHolder) v.getTag();
             store store = data.get(i);
 
@@ -96,5 +97,9 @@ public class ListViewActivity extends AppCompatActivity {
             vh.tv_listviewitme_locate.setText(store.getLocate());
             return v;
         }
+=======
+        mLv1_1 = (ListView) findViewById(R.id.Lv1_1);
+        mLv1_1.setAdapter(new ListAdapter(ListViewActivity.this));
+>>>>>>> 5f8e6d1cbdae41efcf9d7571def145e34a352e4b
     }
 }
