@@ -11,11 +11,17 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.njuss.collection.beans.Store;
+
 import java.util.List;
 
-
+/**
+ * 已完成列表部分
+ * @author weizhaoyang
+ * @since v1.0.1
+ */
 public class ListViewActivityr extends AppCompatActivity {
-    private List<store> data;
+    private List<Store> data;
     private MyBaseAdapt mba;//自定义适配器
     private ListView lv;
 
@@ -26,7 +32,8 @@ public class ListViewActivityr extends AppCompatActivity {
         lv = findViewById(R.id.list_view2);
 
         //1.数据准备
-        data = new storeDao().list();
+        App app = (App)getApplication();
+        data = app.getFinishedList();
         //2.创建自定义适配器
         mba = new MyBaseAdapt((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE));
         //3.为listView设置适配器
@@ -79,14 +86,15 @@ public class ListViewActivityr extends AppCompatActivity {
                 v.setTag(vh);
             }
 
-            ViewHolder vh = (ViewHolder) v.getTag();
-            store store = data.get(i);
 
-            vh.tv_listviewitme_storename.setText(store.getStorename());
-            vh.tv_listviewitme_address.setText(store.getAddress());
+            ListViewActivity.MyBaseAdapt.ViewHolder vh = (ListViewActivity.MyBaseAdapt.ViewHolder) v.getTag();
+            Store store = data.get(i);
+
+            vh.tv_listviewitme_storename.setText(store.getStoreName());
+            vh.tv_listviewitme_address.setText(store.getStoreAddress());
 
             vh.tv_listviewitme_licenseID.setText(store.getLicenseID());
-            vh.tv_listviewitme_locate.setText(store.getLocate());
+            vh.tv_listviewitme_locate.setText(store.getStoreAddress());
             return v;
         }
     }

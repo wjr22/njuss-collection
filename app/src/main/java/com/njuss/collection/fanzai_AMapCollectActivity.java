@@ -1,10 +1,4 @@
-package com.fanzai.voice.datacollect;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+package com.njuss.collection;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -23,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.maps.AMap;
@@ -44,11 +39,15 @@ import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.GeocodeSearch.OnGeocodeSearchListener;
 import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.amap.api.services.geocoder.RegeocodeResult;
-import com.android.lb.util.TxtUtil;
-import com.fanzai.voice.collect.R;
-import com.fanzai.voice.njvoice.GPSDataService;
-import com.fanzai.voice.njvoice.GSensorService;
-import com.fanzai.voice.njvoice.PhoneInfoView;
+import com.njuss.collection.base.Global;
+import com.njuss.collection.service.GPSDataService;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.Logger;
 
 public class fanzai_AMapCollectActivity extends Activity implements OnClickListener, OnCameraChangeListener, OnGeocodeSearchListener, OnMyLocationChangeListener
 {
@@ -60,17 +59,17 @@ public class fanzai_AMapCollectActivity extends Activity implements OnClickListe
     private AMap aMap;
     private Button btn_collect;
     private LinearLayout gpsData_layout;
-    private TextView  txt_posinfo;
-    private TextView  state_text_gps;
-    private TextView  location_type;
-    private TextView  headinfo;
-    private TextView  otherinfo;
-    private TextView  poiname;
-    private TextView  addressname;
-    private TextView  mapgps;
+    private TextView txt_posinfo;
+    private TextView state_text_gps;
+    private TextView location_type;
+    private TextView headinfo;
+    private TextView otherinfo;
+    private TextView poiname;
+    private TextView addressname;
+    private TextView mapgps;
     
     
-    public static List<LatLng> Pt_Arry = null;    
+    public static List<LatLng> Pt_Arry = null;
     private Boolean isFirstLocate = true;
     
     private Intent gpsservice;
@@ -89,7 +88,7 @@ public class fanzai_AMapCollectActivity extends Activity implements OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_amapmain);
         
-        GVariable.gpsOpen = true;
+        Global.gpsOpen = true;
         TextView button_save = (TextView) findViewById(R.id.button_save);
         button_save.setOnClickListener(this);
         txt_posinfo = (TextView) findViewById(R.id.posinfo);
@@ -124,7 +123,7 @@ public class fanzai_AMapCollectActivity extends Activity implements OnClickListe
         }
         
         MyLocationStyle myLocationStyle= new MyLocationStyle();
-        //Á¬Ğø¶¨Î»¡¢À¶µã²»»áÒÆ¶¯µ½µØÍ¼ÖĞĞÄµã£¬²¢ÇÒÀ¶µã»á¸úËæÉè±¸ÒÆ¶¯¡£
+        //è¿ç»­å®šä½ã€è“ç‚¹ä¸ä¼šç§»åŠ¨åˆ°åœ°å›¾ä¸­å¿ƒç‚¹ï¼Œå¹¶ä¸”è“ç‚¹ä¼šè·Ÿéšè®¾å¤‡ç§»åŠ¨ã€‚
         myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER);
         myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromResource(R.drawable.navi_map_gps_locked));
         myLocationStyle.anchor(0.5f, 0.5f);
@@ -144,18 +143,15 @@ public class fanzai_AMapCollectActivity extends Activity implements OnClickListe
         aMap.setOnCameraChangeListener(this);
         aMap.setOnMyLocationChangeListener(this);
         
-        //×¢²áGPS¹ã²¥½ÓÊÕ£¬»ñÈ¡GPS×ø±ê
+        //æ³¨å†ŒGPSå¹¿æ’­æ¥æ”¶ï¼Œè·å–GPSåæ ‡
         registerReceiver(gpsRefreshReceiver, gpsIntervalIntentFilter());
         
-        //³õÊ¼»¯
+        //åˆå§‹åŒ–
         Pt_Arry = new ArrayList<LatLng>();
         
-        //Æô¶¯´«¸ĞÆ÷·şÎñ
+        //å¯åŠ¨ä¼ æ„Ÿå™¨æœåŠ¡
         gpsservice = new Intent(this, GPSDataService.class);
         startService(gpsservice);
-        
-        gsensorservice = new Intent(this, GSensorService.class);
-        startService(gsensorservice);
         
         writeAllCellInfo();
         
@@ -169,27 +165,27 @@ public class fanzai_AMapCollectActivity extends Activity implements OnClickListe
         List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ALL);
         
         String content = "";
-        content += "Ó²¼şÖÆÔìÉÌ:" + android.os.Build.MANUFACTURER + "\n";
-        content += "Æ·ÅÆÃû³Æ:" + android.os.Build.BRAND + "\n";
-        content += "Ö÷°åÃû³Æ:" + android.os.Build.BOARD + "\n";
-        content += "Éè±¸Ãû:" + android.os.Build.DEVICE + "\n";
-        content += "ÊÖ»úĞÍºÅ:" + android.os.Build.MODEL + "\n";
-        content += "²úÆ·Ãû³Æ:" + android.os.Build.PRODUCT + "\n";
-        content += "Éè±¸Ê¶±ğÂë:" + android.os.Build.FINGERPRINT + "\n";
-        content += "Ó²¼şĞòÁĞºÅ:" + android.os.Build.ID + "\n";
-        content += "°²×¿°æ±¾ºÅ:" + android.os.Build.VERSION.RELEASE + "\n";
-        content += "Ö¸Áî¼¯Ãû³Æ:" + android.os.Build.CPU_ABI + "\n";
-        content += "´«¸ĞÆ÷ÁĞ±í:" + "\n";
+        content += "ç¡¬ä»¶åˆ¶é€ å•†:" + android.os.Build.MANUFACTURER + "\n";
+        content += "å“ç‰Œåç§°:" + android.os.Build.BRAND + "\n";
+        content += "ä¸»æ¿åç§°:" + android.os.Build.BOARD + "\n";
+        content += "è®¾å¤‡å:" + android.os.Build.DEVICE + "\n";
+        content += "æ‰‹æœºå‹å·:" + android.os.Build.MODEL + "\n";
+        content += "äº§å“åç§°:" + android.os.Build.PRODUCT + "\n";
+        content += "è®¾å¤‡è¯†åˆ«ç :" + android.os.Build.FINGERPRINT + "\n";
+        content += "ç¡¬ä»¶åºåˆ—å·:" + android.os.Build.ID + "\n";
+        content += "å®‰å“ç‰ˆæœ¬å·:" + android.os.Build.VERSION.RELEASE + "\n";
+        content += "æŒ‡ä»¤é›†åç§°:" + android.os.Build.CPU_ABI + "\n";
+        content += "ä¼ æ„Ÿå™¨åˆ—è¡¨:" + "\n";
         
         for (Sensor item : sensors) {
             content +=
-                item.getName() + ",  " + PhoneInfoView.SensorType(item.getType()) + ",  °æ±¾:" + 
-                item.getVersion() + ",  ³§ÉÌ:" + item.getVendor() + ",  ·Ö±æÂÊ:" + 
-                item.getResolution() + ",  Á¿³Ì:" + item.getMaximumRange() + ",  ÄÜºÄ:" + 
-                item.getPower() + ",  ×îĞ¡¼ä¸ô:" + item.getMinDelay() + "\n";
+                item.getName() + ",  " + ",  ç‰ˆæœ¬:" +
+                item.getVersion() + ",  å‚å•†:" + item.getVendor() + ",  åˆ†è¾¨ç‡:" + 
+                item.getResolution() + ",  é‡ç¨‹:" + item.getMaximumRange() + ",  èƒ½è€—:" + 
+                item.getPower() + ",  æœ€å°é—´éš”:" + item.getMinDelay() + "\n";
         }
         
-        TxtUtil.saveTxt(content, GVariable.sensorPath+"phone_sensor/", "phone_sensor_" + GVariable.dayFormat.format(new Date()) + ".txt");
+        //TxtUtil.saveTxt(content, Global.sensorPath+"phone_sensor/", "phone_sensor_" + Global.dayFormat.format(new Date()) + ".txt");
     }
     
     @Override
@@ -208,7 +204,7 @@ public class fanzai_AMapCollectActivity extends Activity implements OnClickListe
      @Override
      protected void onDestroy() {
         unregisterReceiver(gpsRefreshReceiver);
-        GVariable.gpsOpen = false;
+        Global.gpsOpen = false;
         mMapView.onDestroy();
         
         if (gpsservice != null)
@@ -257,18 +253,6 @@ public class fanzai_AMapCollectActivity extends Activity implements OnClickListe
                 else
                     gpsData_layout.setVisibility(View.VISIBLE);
                 break;
-            case R.id.sensorData:           
-                intent = new Intent(this, fanzai_DataCollectActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.mediaData:
-                intent = new Intent(this, fanzai_TakePhotoActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.cellInfo:
-                intent = new Intent(this, PhoneInfoView.class);
-                startActivity(intent);
-                break;
             case R.id.button_collect:
                 collect_click();
                 break;
@@ -289,7 +273,7 @@ public class fanzai_AMapCollectActivity extends Activity implements OnClickListe
         if(nowLatLng != null)
             aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(nowLatLng,17));
         else {
-            HLog.toast(getApplicationContext(), "GPS´íÎó");
+            Toast.makeText(getApplicationContext(), "GPSé”™è¯¯",Toast.LENGTH_LONG);
         }
     }
     
@@ -298,12 +282,12 @@ public class fanzai_AMapCollectActivity extends Activity implements OnClickListe
     {
         // TODO Auto-generated method stub
         //super.onBackPressed();
-        long mNowTime = System.currentTimeMillis();//»ñÈ¡µÚÒ»´Î°´¼üÊ±¼ä
-        if((mNowTime - mPressedTime) > 2000){//±È½ÏÁ½´Î°´¼üÊ±¼ä²î
-            HLog.toast(this, "ÔÙ°´Ò»´ÎÍË³ö³ÌĞò");
+        long mNowTime = System.currentTimeMillis();//è·å–ç¬¬ä¸€æ¬¡æŒ‰é”®æ—¶é—´
+        if((mNowTime - mPressedTime) > 2000){//æ¯”è¾ƒä¸¤æ¬¡æŒ‰é”®æ—¶é—´å·®
+            Toast.makeText(this, "å†æŒ‰ä¸€æ¬¡é€€å‡ºç¨‹åº", Toast.LENGTH_SHORT);
             mPressedTime = mNowTime;
         }
-        else{//ÍË³ö³ÌĞò
+        else{//é€€å‡ºç¨‹åº
             this.finish();
             System.exit(0);
         }
@@ -311,36 +295,36 @@ public class fanzai_AMapCollectActivity extends Activity implements OnClickListe
     
     private void init_collect()
     {
-        if(GVariable.isCollect)
+        if(Global.isCollect)
         {
-            btn_collect.setText("ÕıÔÚ²É¼¯...");
+            btn_collect.setText("æ­£åœ¨é‡‡é›†...");
         }
         else 
         {
-            btn_collect.setText("¿ªÊ¼²É¼¯");
+            btn_collect.setText("å¼€å§‹é‡‡é›†");
         }
     }
     
     private void collect_click()
     {
-        GVariable.isCollect = !GVariable.isCollect;
+        Global.isCollect = !Global.isCollect;
         
-        if(GVariable.isCollect)
+        if(Global.isCollect)
         {
-            HLog.toast(getApplicationContext(), "¿ªÊ¼²É¼¯,Êı¾İ±£´æÖÁ£º" + GVariable.sensorPath);
-            btn_collect.setText("ÕıÔÚ²É¼¯...");
+            Toast.makeText(getApplicationContext(), "å¼€å§‹é‡‡é›†,æ•°æ®ä¿å­˜è‡³ï¼š" + Global.sensorPath, Toast.LENGTH_SHORT).show();
+            btn_collect.setText("æ­£åœ¨é‡‡é›†...");
         }
         else 
         {
-            HLog.toast(getApplicationContext(), "Í£Ö¹²É¼¯");
-            btn_collect.setText("¿ªÊ¼²É¼¯");
+            Toast.makeText(getApplicationContext(), "åœæ­¢é‡‡é›†",Toast.LENGTH_SHORT).show();
+            btn_collect.setText("å¼€å§‹é‡‡é›†");
         }
     }
     
     public static String ACTION_REFRESH_GPS = "action.refresh.gps";
     
     private static IntentFilter gpsIntervalIntentFilter()
-    { // ×¢²á½ÓÊÕµÄÊÂ¼ş
+    { // æ³¨å†Œæ¥æ”¶çš„äº‹ä»¶
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_REFRESH_GPS);
         intentFilter.addAction(GPSDataService.ACTION_GPS_ERROR);
@@ -361,9 +345,9 @@ public class fanzai_AMapCollectActivity extends Activity implements OnClickListe
                     double log = intent.getDoubleExtra("log", -1);
                     if (lat > 0 && log > 0)
                     {
-                        //¸üĞÂ×ø±êĞÅÏ¢
-                        String gpscoord = "¾­¶È£º" + GVariable.decimalFormat.format(log) +
-                                          "¡ã,  Î³¶È£º" + GVariable.decimalFormat.format(lat) + "¡ã" ;
+                        //æ›´æ–°åæ ‡ä¿¡æ¯
+                        String gpscoord = "ç»åº¦ï¼š" + Global.decimalFormat.format(log) +
+                                          "Â°,  çº¬åº¦ï¼š" + Global.decimalFormat.format(lat) + "Â°" ;
                         txt_posinfo.setText(gpscoord);                       
                     }
                     setGPSState();
@@ -380,27 +364,27 @@ public class fanzai_AMapCollectActivity extends Activity implements OnClickListe
             catch (Exception ex)
             {
                 // TODO: handle exception
-                HLog.toast(getApplicationContext(), "GPS½ÓÊÕ´íÎó");
+                //HLog.toast(getApplicationContext(), "GPSæ¥æ”¶é”™è¯¯");
             }
         }
     };
     
-    TimerTask titask = new TimerTask() {  
-        @Override  
+    TimerTask titask = new TimerTask() {
+        @Override
         public void run() { 
-            runOnUiThread(new Runnable() {      // UI thread  
-                @Override  
+            runOnUiThread(new Runnable() {      // UI thread
+                @Override
                 public void run() {  
-                    //txt_posinfo.setText(GVariable.BloothDataString);
-                    String testString = "·½Ïò½Ç£º" + GVariable.aziMuth + "¡ã, " + 
-                                        "¸©Ñö½Ç£º" + GVariable.pitch + "¡ã, " + 
-                                        "·­¹ö½Ç£º" + GVariable.roll + "¡ã";
+                    //txt_posinfo.setText(Global.BloothDataString);
+                    String testString = "æ–¹å‘è§’ï¼š" + Global.aziMuth + "Â°, " +
+                                        "ä¿¯ä»°è§’ï¼š" + Global.pitch + "Â°, " +
+                                        "ç¿»æ»šè§’ï¼š" + Global.roll + "Â°";
                     headinfo.setText(testString);
                     
-                    testString = "¹âÕÕÇ¿¶È£º" + GVariable.LIGHT + "lx, ¾àÀë£º" + GVariable.PROXIMITY + "cm, ÆøÑ¹£º" + GVariable.decimal3Format.format(GVariable.PRESSURE) + "hPa";
+                    testString = "å…‰ç…§å¼ºåº¦ï¼š" + Global.LIGHT + "lx, è·ç¦»ï¼š" + Global.PROXIMITY + "cm, æ°”å‹ï¼š" + Global.decimal3Format.format(Global.PRESSURE) + "hPa";
                     otherinfo.setText(testString);
                     
-                    if(GVariable.isCollect)
+                    if(Global.isCollect)
                     {
                         addPointToMap();
                     }
@@ -418,72 +402,72 @@ public class fanzai_AMapCollectActivity extends Activity implements OnClickListe
     };
     
     /**
-     * ÉèÖÃGPS×´Ì¬
+     * è®¾ç½®GPSçŠ¶æ€
      */
     private void setGPSState()
     {
-        if(GVariable.locationType==0)
+        if(Global.locationType==0)
         {
-            location_type.setText("¶¨Î»Ê§°Ü");
+            location_type.setText("å®šä½å¤±è´¥");
         }
-        else  if(GVariable.locationType==1)
+        else  if(Global.locationType==1)
         {
-            location_type.setText("GPS¶¨Î»£º" + GVariable.gpsSolution);
+            location_type.setText("GPSå®šä½ï¼š" + Global.gpsSolution);
         }
-        else  if(GVariable.locationType==2)
+        else  if(Global.locationType==2)
         {
-            location_type.setText("Ç°´Î¶¨Î»");
+            location_type.setText("å‰æ¬¡å®šä½");
         }
-        else  if(GVariable.locationType==4)
+        else  if(Global.locationType==4)
         {
-            location_type.setText("»º´æ¶¨Î»");
+            location_type.setText("ç¼“å­˜å®šä½");
         }
-        else  if(GVariable.locationType==5)
+        else  if(Global.locationType==5)
         {
-            location_type.setText("Wifi¶¨Î»");
+            location_type.setText("Wifiå®šä½");
         }
-        else  if(GVariable.locationType==6)
+        else  if(Global.locationType==6)
         {
-            location_type.setText("»ùÕ¾¶¨Î»");
+            location_type.setText("åŸºç«™å®šä½");
         }
-        else  if(GVariable.locationType==8)
+        else  if(Global.locationType==8)
         {
-            location_type.setText("ÀëÏß¶¨Î»");
+            location_type.setText("ç¦»çº¿å®šä½");
         }
         else {
-            location_type.setText("ÍøÂç¶¨Î»");
+            location_type.setText("ç½‘ç»œå®šä½");
         }
         
-        if(GVariable.gpsState==AMapLocation.GPS_ACCURACY_UNKNOWN)
+        if(Global.gpsState== AMapLocation.GPS_ACCURACY_UNKNOWN)
         {
-            state_text_gps.setText("GPS×´Ì¬Î´Öª");
+            state_text_gps.setText("GPSçŠ¶æ€æœªçŸ¥");
             gpsData.setImageResource(R.drawable.map_gps_error);
         }
-        else if(GVariable.gpsState==AMapLocation.GPS_ACCURACY_BAD)
+        else if(Global.gpsState== AMapLocation.GPS_ACCURACY_BAD)
         {
-            state_text_gps.setText("GPSĞÅºÅÈõ");
+            state_text_gps.setText("GPSä¿¡å·å¼±");
             gpsData.setImageResource(R.drawable.map_gps_bad);
         }
-        else if(GVariable.gpsState==AMapLocation.GPS_ACCURACY_GOOD)
+        else if(Global.gpsState== AMapLocation.GPS_ACCURACY_GOOD)
         {
-            state_text_gps.setText("GPSĞÅºÅÇ¿");
+            state_text_gps.setText("GPSä¿¡å·å¼º");
             gpsData.setImageResource(R.drawable.map_gps_ok);
         }
-        //¶¨Î»Ê§°ÜÏÔÊ¾¶¨Î»´íÎóÂë
-        if(GVariable.amapLocation != null && GVariable.amapLocation.getErrorCode() != 0)
-            state_text_gps.setText(state_text_gps.getText() + ":" + GVariable.amapLocation.getErrorCode());
+        //å®šä½å¤±è´¥æ˜¾ç¤ºå®šä½é”™è¯¯ç 
+        if(Global.amapLocation != null && Global.amapLocation.getErrorCode() != 0)
+            state_text_gps.setText(state_text_gps.getText() + ":" + Global.amapLocation.getErrorCode());
         
     }
     
     public void addPointToMap()
     {
-        if(nowLatLng != null && GVariable.isCollect)
+        if(nowLatLng != null && Global.isCollect)
         {
             aMap.clear();
             //add marker
             aMap.addMarker(new MarkerOptions().position(nowLatLng).snippet("DefaultMarker").draggable(false));
             
-            //ÖĞĞÄµã²åÈëList
+            //ä¸­å¿ƒç‚¹æ’å…¥List
             Pt_Arry.add(nowLatLng);
         }
     }
@@ -551,11 +535,11 @@ public class fanzai_AMapCollectActivity extends Activity implements OnClickListe
     public void onRegeocodeSearched(RegeocodeResult result , int rCode)
     {
         // TODO Auto-generated method stub
-        GVariable.geocodeResult = result;
+        Global.geocodeResult = result;
         String formatAddress = result.getRegeocodeAddress().getFormatAddress();
         String formatAoi = result.getRegeocodeAddress().getAois().get(0).getAoiName();
-        poiname.setText("Ñ¡µãÎ»ÖÃ:" + formatAoi);
-        addressname.setText("µØÖ·:" + formatAddress);
+        poiname.setText("é€‰ç‚¹ä½ç½®:" + formatAoi);
+        addressname.setText("åœ°å€:" + formatAddress);
     }
     
 }

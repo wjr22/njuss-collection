@@ -10,7 +10,7 @@
 		        android:layout_height="@dimen/title_height"
 		        android:background="@color/black" >
 		
-		        <ImageView
+ 		        <ImageView
 		            android:id="@+id/button_back"
 		            android:layout_width="@dimen/title_height_46"
 		            android:layout_height="@dimen/title_height_46"

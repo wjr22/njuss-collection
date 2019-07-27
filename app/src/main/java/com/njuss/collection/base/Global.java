@@ -83,4 +83,5 @@ public class Global {
     public static float LINEAR_ACCELERATION_X = 0;
     public static float LINEAR_ACCELERATION_Y = 0;
     public static float LINEAR_ACCELERATION_Z = 0;
+    public static String sensorPath;
 }

@@ -11,11 +11,11 @@ import com.njuss.collection.tools.DBHelper;
 /**
  * 采集信息业务类，采集员（1） -> 零售商（1），主要是将数据写入数据库
  * HOW TO USE:
- *  实例化该类：
+ *  1.实例化该类：
  *      CollectionService c = new CollectionService(getApplicationContext());
- *  设置收集店铺：
+ *  2.设置收集店铺：
  *      c.setStore(Store);
- *  更新数据库：
+ *  3.更新数据库：
  *      c.update();
  * @author wangj
  * @see GridConductor

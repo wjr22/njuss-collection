@@ -6,6 +6,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.widget.TabHost;
 
+/**
+ * Tab host,底部，分别是已完成和未完成
+ * @author weizhaoyang
+ */
 public class TabHostActivity extends TabActivity {
 
     @Override

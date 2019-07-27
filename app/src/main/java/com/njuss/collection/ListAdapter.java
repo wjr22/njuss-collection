@@ -43,9 +43,9 @@ public class ListAdapter extends BaseAdapter {
             convertView = mLayoutInflater.inflate(R.layout.layout_list_item,null);
             holder = new ViewHolder();
 
-            holder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
-            holder.tvTime = (TextView) convertView.findViewById(R.id.tv_time);
-            holder.tvContent = (TextView) convertView.findViewById(R.id.tv_content);
+            //holder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
+            //holder.tvTime = (TextView) convertView.findViewById(R.id.tv_time);
+            //holder.tvContent = (TextView) convertView.findViewById(R.id.tv_content);
 
             convertView.setTag(holder);
 
