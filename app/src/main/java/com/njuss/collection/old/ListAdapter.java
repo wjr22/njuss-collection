@@ -1,4 +1,4 @@
-package com.njuss.collection;
+package com.njuss.collection.old;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.njuss.collection.R;
 
 public class ListAdapter extends BaseAdapter {
 

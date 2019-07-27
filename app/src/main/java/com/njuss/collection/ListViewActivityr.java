@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.njuss.collection.base.User;
 import com.njuss.collection.beans.Store;
 
 import java.util.List;
@@ -32,8 +33,7 @@ public class ListViewActivityr extends AppCompatActivity {
         lv = findViewById(R.id.list_view2);
 
         //1.数据准备
-        App app = (App)getApplication();
-        data = app.getFinishedList();
+        data = User.getFinishedList();
         //2.创建自定义适配器
         mba = new MyBaseAdapt((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE));
         //3.为listView设置适配器

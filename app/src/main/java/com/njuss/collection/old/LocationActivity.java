@@ -1,4 +1,4 @@
-package com.njuss.collection;
+package com.njuss.collection.old;
 
 import android.os.Bundle;
 import android.widget.TextView;
@@ -8,6 +8,7 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.AMapLocationQualityReport;
+import com.njuss.collection.R;
 import com.njuss.collection.base.CheckPermissionsActivity;
 import com.njuss.collection.tools.Utils;
 

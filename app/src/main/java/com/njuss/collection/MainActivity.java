@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
 
+import com.njuss.collection.base.User;
 import com.njuss.collection.service.UserService;
 
 import android.view.View;
@@ -36,9 +37,9 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("get msg string is ...", s +"======");
                 UserService userService = new UserService(getApplicationContext());
                 if(userService.checkUserByMobile(s)) {
-                    App app = (App)getApplication();
-                    app.setFinished(userService.finished);
-                    app.setUnfinished(userService.unfinished);
+                    User.setFinished(userService.finished);
+                    User.setUnfinished(userService.unfinished);
+                    Log.d("SSS", User.getUnfinished().size() +"========");
                     Intent intent = new Intent(MainActivity.this, TabHostActivity.class);
                     startActivity(intent);
                 }else{

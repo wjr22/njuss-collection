@@ -71,7 +71,7 @@ public class UploadData {
                 for(int j=0; j<t.length; j++) {
                     cv.put(District.names[j], t[j]);
                 }
-                Log.d("DB Operate ", "insert into district "+ cv.get(District.names[0])+" Success!======");
+                Log.d("DB Operate ", "insert into district "+ cv.get(District.names[1])+" Success!======");
                 db.insert("tDistrict",null, cv);
             }
         } catch (IOException e) {
