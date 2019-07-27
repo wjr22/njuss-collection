@@ -66,6 +66,7 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.d("DB Operate ==", "CREATE DATABASE dbTobacco Success! and Created three tables.========");
         UploadData up = new UploadData.Builder().setDBHelper(this).setDB(db).setContext(con).build();
         up.dataInit();
+        up.insertForTest();
     }
 
     @Override

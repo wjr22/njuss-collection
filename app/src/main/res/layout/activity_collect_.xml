@@ -63,13 +63,13 @@
 
             <EditText
                 android:id="@+id/et_storeName"
-                android:gravity="center"
-                android:text=""
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:focusable="false"
+                android:gravity="center"
                 android:inputType="textMultiLine"
                 android:minLines="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:text=""
                 android:textSize="8sp" />
         </LinearLayout>
         <LinearLayout
@@ -217,6 +217,11 @@
                     android:textSize="8sp" />
 
             </LinearLayout>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="开始定位"
+                android:id="@+id/btn_gps"/>
         </LinearLayout>
 
     </LinearLayout>

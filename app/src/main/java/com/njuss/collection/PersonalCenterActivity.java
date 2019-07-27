@@ -7,14 +7,10 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-<<<<<<< HEAD
-public class personalcenterActivity extends AppCompatActivity {
-=======
 /**
  * 个人中心
  */
 public class PersonalCenterActivity extends AppCompatActivity {
->>>>>>> 5f8e6d1cbdae41efcf9d7571def145e34a352e4b
 
     private Button mBtn_uncollected;
     private Button mBtn_collected;
@@ -28,7 +24,7 @@ public class PersonalCenterActivity extends AppCompatActivity {
         mBtn_uncollected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(personalcenterActivity.this,ListViewActivity.class);
+                Intent intent = new Intent(PersonalCenterActivity.this,ListViewActivity.class);
                 startActivity(intent);
             }
         });

@@ -5,19 +5,26 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.njuss.collection.base.User;
+import com.njuss.collection.old.User;
 import com.njuss.collection.beans.GridConductor;
 import com.njuss.collection.beans.Store;
 import com.njuss.collection.tools.DBHelper;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 /**
- * 处理用户服务，加载用户对应的商铺
+ * 处理用户服务，加载用户对应的商铺\验证身份
+ * HOW TO USE:
+ *      加载已完成/未完成商铺：
+ *
  * @author wangj
- * @see com.njuss.collection.base.User
+ * @see User
  */
 public class UserService {
 
@@ -27,22 +34,24 @@ public class UserService {
 
     private DBHelper dbHelper;
 
-    private Map<String, Store>  unfinished;
+    public Map<String, Store>  unfinished;
 
-    private Map<String, Store>  finished;
+    public Map<String, Store>  finished;
 
     public UserService(Context context){
         conductor = User.getConductor();
         dbHelper = new DBHelper(context);
+        unfinished = new TreeMap<>();
+        finished = new TreeMap<>();
     }
 
     /**
-     *
-     * @param context
+     * 设置已完成和未完成Map，采用treeMap保证原址
      */
-    public void setMap(Context context){
+    public void setMap(){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         List<Store> stores = new LinkedList<>();
+
         Cursor cursor = db.query("tStores",null, "conductorID=?", new String[]{conductor.getConductorID().toString()},null,null,null);
         if(cursor.moveToFirst()){
             while(!cursor.isLast()){
@@ -91,10 +100,10 @@ public class UserService {
                 conductor.setConductorName(cursor.getString(cursor.getColumnIndex("conductorName")));
                 conductor.setDistrictCode(cursor.getString(cursor.getColumnIndex("districtCode")));
                 this.conductor = conductor;
-                setMap(this.context);
+                setMap();
                 return true;
         }
-        return cursor.getCount() != 1;
+        return false;
     }
 
     public boolean checkUserByMobile(String mobile, String pwd) {
@@ -108,9 +117,11 @@ public class UserService {
                 conductor.setConductorName(cursor.getString(cursor.getColumnIndex("conductorName")));
                 conductor.setDistrictCode(cursor.getString(cursor.getColumnIndex("districtCode")));
                 this.conductor = conductor;
-                setMap(this.context);
+                setMap();
                 return true;
             }
         return false;
     }
+
+
 }

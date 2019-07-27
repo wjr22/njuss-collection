@@ -36,7 +36,9 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("get msg string is ...", s +"======");
                 UserService userService = new UserService(getApplicationContext());
                 if(userService.checkUserByMobile(s)) {
-
+                    App app = (App)getApplication();
+                    app.setFinished(userService.finished);
+                    app.setUnfinished(userService.unfinished);
                     Intent intent = new Intent(MainActivity.this, TabHostActivity.class);
                     startActivity(intent);
                 }else{
