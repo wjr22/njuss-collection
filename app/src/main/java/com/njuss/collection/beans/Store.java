@@ -1,5 +1,6 @@
 package com.njuss.collection.beans;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Objects;
  * @since 1.0
  * @see GridConductor
  */
-public class Store {
+public class Store implements Serializable {
 
     public final static String[] names = {"licenseID",
             "conductorID", "storeName", "storeAddress", "GPSAddress",

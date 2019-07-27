@@ -102,13 +102,20 @@ public class CollectActivity extends AppCompatActivity  implements  View.OnClick
 
         gps = (Button) findViewById(R.id.btn_gps);
 
-        etStoreAddress.setText(store.getStoreAddress());
-        etLienceID.setText(store.getConductorID());
-        etStoreName.setText(store.getStoreName());
-        etGPSLongitute.setText(store.getGPSLongitude());
-        etGPSLatitude.setText(store.getGPSLatitude());
-        etGPSAddress.setText(store.getGPSAddress());
-        etConductorID.setText(store.getConductorID());
+        if(store.getStoreAddress() != null)
+            etStoreAddress.setText(store.getStoreAddress());
+        if(store.getConductorID() != null)
+            etLienceID.setText(store.getConductorID());
+        if(store.getStoreName() != null)
+            etStoreName.setText(store.getStoreName());
+        if(store.getGPSLongitude()!=null)
+            etGPSLongitute.setText(store.getGPSLongitude());
+        if(store.getGPSLatitude()!= null)
+            etGPSLatitude.setText(store.getGPSLatitude());
+        if(store.getGPSAddress()!= null)
+            etGPSAddress.setText(store.getGPSAddress());
+        if(store.getConductorID()!= null)
+            etConductorID.setText(store.getConductorID());
     }
 
     private void initListener() {
