@@ -5,17 +5,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.njuss.collection.old.User;
+import com.njuss.collection.base.User;
 import com.njuss.collection.beans.GridConductor;
 import com.njuss.collection.beans.Store;
 import com.njuss.collection.tools.DBHelper;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 /**
@@ -38,11 +33,13 @@ public class UserService {
 
     public Map<String, Store>  finished;
 
+
     public UserService(Context context){
         conductor = User.getConductor();
         dbHelper = new DBHelper(context);
         unfinished = new TreeMap<>();
         finished = new TreeMap<>();
+
     }
 
     /**
@@ -50,34 +47,31 @@ public class UserService {
      */
     public void setMap(){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        List<Store> stores = new LinkedList<>();
-
         Cursor cursor = db.query("tStores",null, "conductorID=?", new String[]{conductor.getConductorID().toString()},null,null,null);
-        if(cursor.moveToFirst()){
-            while(!cursor.isLast()){
-                String[] ss = cursor.getColumnNames();
-                Store store = new Store();
-                store.setStoreName(cursor.getString(cursor.getColumnIndex("storeName")));
-                store.setStoreAddress(cursor.getString(cursor.getColumnIndex("storeAddress")));
-                store.setLicenseID(cursor.getString(cursor.getColumnIndex("licenseID")));
-                store.setGPSAddress(cursor.getString(cursor.getColumnIndex("GPSAddress")));
-                store.setGPSLatitude(cursor.getString(cursor.getColumnIndex("GPSLatitude")));
-                store.setStorePicL(cursor.getString(cursor.getColumnIndex("storePicL")));
-                store.setLicensePic(cursor.getString(cursor.getColumnIndex("licensePic")));
-                store.setGPSLongitude(cursor.getString(cursor.getColumnIndex("GPSLongitude")));
-                store.setConductorID(cursor.getInt(cursor.getColumnIndex("conductorID")));
-                store.setStorePicM(cursor.getString(cursor.getColumnIndex("storePicM")));
-                store.setStorePicR(cursor.getString(cursor.getColumnIndex("storePicR")));
-                if(store.getStoreAddress() == null){
-                    Log.d("unfinished stores list ", "add One "+ store.getLicenseID()+" =====");
-                    unfinished.put(store.getLicenseID(), store);
-                }else{
-                    Log.d("finished stores list ", "add One "+ store.getLicenseID()+" =====");
-                    finished.put(store.getLicenseID(),store);
-                }
-                cursor.moveToNext();
+        Log.d("DB Operate --:", "select by conduct id sum "+ cursor.getCount());
+        cursor.moveToFirst();
+        do{
+            String[] ss = cursor.getColumnNames();
+            Store store = new Store();
+            store.setStoreName(cursor.getString(cursor.getColumnIndex("storeName")));
+            store.setStoreAddress(cursor.getString(cursor.getColumnIndex("storeAddress")));
+            store.setLicenseID(cursor.getString(cursor.getColumnIndex("licenseID")));
+            store.setGPSAddress(cursor.getString(cursor.getColumnIndex("GPSAddress")));
+            store.setGPSLatitude(cursor.getString(cursor.getColumnIndex("GPSLatitude")));
+            store.setStorePicL(cursor.getString(cursor.getColumnIndex("storePicL")));
+            store.setLicensePic(cursor.getString(cursor.getColumnIndex("licensePic")));
+            store.setGPSLongitude(cursor.getString(cursor.getColumnIndex("GPSLongitude")));
+            store.setConductorID(cursor.getInt(cursor.getColumnIndex("conductorID")));
+            store.setStorePicM(cursor.getString(cursor.getColumnIndex("storePicM")));
+            store.setStorePicR(cursor.getString(cursor.getColumnIndex("storePicR")));
+            if(store.getStoreAddress() == null){
+                Log.d("unfinished stores list ", "add One "+ store.getLicenseID()+" =====");
+                unfinished.put(store.getLicenseID(), store);
+            }else{
+                Log.d("finished stores list ", "add One "+ store.getLicenseID()+" =====");
+                finished.put(store.getLicenseID(),store);
             }
-        }
+        }while(cursor.moveToNext());
     }
 
     public boolean checkUser(String name){
@@ -93,15 +87,17 @@ public class UserService {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor cursor = db.query("tGridConductor", null, "conductorMobile=?", new String[]{mobile},null,null,null);
         if (cursor.getCount() == 1) {
-                GridConductor conductor = new GridConductor();
-                cursor.moveToFirst();
-                conductor.setConductorID(cursor.getInt(cursor.getColumnIndex("conductorID")));
-                conductor.setConductorMobile(cursor.getString(cursor.getColumnIndex("conductorMobile")));
-                conductor.setConductorName(cursor.getString(cursor.getColumnIndex("conductorName")));
-                conductor.setDistrictCode(cursor.getString(cursor.getColumnIndex("districtCode")));
-                this.conductor = conductor;
-                setMap();
-                return true;
+            GridConductor conductor = new GridConductor();
+            cursor.moveToFirst();
+            conductor.setConductorID(cursor.getInt(cursor.getColumnIndex("conductorID")));
+            conductor.setConductorMobile(cursor.getString(cursor.getColumnIndex("conductorMobile")));
+            conductor.setConductorName(cursor.getString(cursor.getColumnIndex("conductorName")));
+            conductor.setDistrictCode(cursor.getString(cursor.getColumnIndex("districtCode")));
+            this.conductor = conductor;
+            Log.d("LOADING DATA --", "STARTING!=======");
+            setMap();
+            Log.d("LOADING DATA --", "END!=======");
+            return true;
         }
         return false;
     }

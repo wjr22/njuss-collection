@@ -1,7 +1,9 @@
 package com.njuss.collection;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 
 import android.content.Context;
@@ -18,9 +20,11 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.njuss.collection.base.User;
 import com.njuss.collection.beans.Store;
 import com.njuss.collection.service.UserService;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -35,11 +39,11 @@ public class ListViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.tab1);
         lv = findViewById(R.id.list_view);
         //1.数据准备
-        App app = (App)getApplication();
-        data = app.getFinishedList();
+        data = User.getUnfinishedList();
+        Log.d("LOADING DATA --", "SUM "+ data.size()+"======");
         //2.创建自定义适配器
         mba = new MyBaseAdapt((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE));
         //3.为listView设置适配器
@@ -93,13 +97,22 @@ public class ListViewActivity extends AppCompatActivity {
             }
 
             ViewHolder vh = (ViewHolder) v.getTag();
-            Store store = data.get(i);
+            final Store store = data.get(i);
 
             vh.tv_listviewitme_storename.setText(store.getStoreName());
             vh.tv_listviewitme_address.setText(store.getStoreAddress());
 
             vh.tv_listviewitme_licenseID.setText(store.getLicenseID());
             vh.tv_listviewitme_locate.setText(store.getStoreAddress());
+
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent it = new Intent(ListViewActivity.this, CollectActivity.class);
+                    it.putExtra("store", store);
+                    startActivity(it);
+                }
+            });
             return v;
         }
     }

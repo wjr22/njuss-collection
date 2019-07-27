@@ -1,6 +1,7 @@
 package com.njuss.collection;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +12,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.njuss.collection.base.User;
 import com.njuss.collection.beans.Store;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -32,8 +35,7 @@ public class ListViewActivityr extends AppCompatActivity {
         lv = findViewById(R.id.list_view2);
 
         //1.数据准备
-        App app = (App)getApplication();
-        data = app.getFinishedList();
+        data = User.getFinishedList();
         //2.创建自定义适配器
         mba = new MyBaseAdapt((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE));
         //3.为listView设置适配器
@@ -88,13 +90,22 @@ public class ListViewActivityr extends AppCompatActivity {
 
 
             ListViewActivity.MyBaseAdapt.ViewHolder vh = (ListViewActivity.MyBaseAdapt.ViewHolder) v.getTag();
-            Store store = data.get(i);
+            final Store store = data.get(i);
 
             vh.tv_listviewitme_storename.setText(store.getStoreName());
             vh.tv_listviewitme_address.setText(store.getStoreAddress());
 
             vh.tv_listviewitme_licenseID.setText(store.getLicenseID());
             vh.tv_listviewitme_locate.setText(store.getStoreAddress());
+
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent it = new Intent(ListViewActivityr.this, CollectActivity.class);
+                    it.putExtra("store", (Serializable) store);
+                    startActivity(it);
+                }
+            });
             return v;
         }
     }

@@ -1,4 +1,4 @@
-package com.njuss.collection.old;
+package com.njuss.collection.base;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -8,8 +8,12 @@ import com.njuss.collection.beans.GridConductor;
 import com.njuss.collection.beans.Store;
 import com.njuss.collection.tools.DBHelper;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * 单例类，用来控制用户唯一性
@@ -32,21 +36,10 @@ public class User {
     private static Map<String, Store> unfinished;
 
     private User(){
-        finished = new LinkedHashMap<>();
+        finished = new TreeMap<>();
         unfinished = new LinkedHashMap<>();
     }
 
-    public void setMap(Context context){
-        DBHelper dbHelper = new DBHelper(context);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor cursor = db.query("tStores",null, "conductorID=?", new String[]{conductor.getConductorID().toString()},null,null,null);
-        if(cursor.moveToFirst()){
-            while(!cursor.isLast()){
-                cursor.getColumnNames();
-                cursor.moveToNext();
-            }
-        }
-    }
 
     public static User getInstance(){
         if(instance == null)
@@ -67,5 +60,45 @@ public class User {
 
     public static GridConductor getConductor() {
         return conductor;
+    }
+
+    public static Map<String, Store> getFinished() {
+        return finished;
+    }
+
+    public static Map<String, Store> getUnfinished() {
+        return unfinished;
+    }
+
+    public static void setFinished(Map<String, Store> finished_) {
+        finished = finished_;
+    }
+
+    public static void setUnfinished(Map<String, Store> unfinished_) {
+        unfinished = unfinished_;
+    }
+
+    /**
+     * 获取完成列表
+     */
+    public static List<Store> getFinishedList(){
+        Collection<Store> c = finished.values();
+        List<Store> val = new ArrayList<>(c);
+        return val;
+    }
+
+    /**
+     * @return 未完成商户列表
+     */
+    public static List<Store> getUnfinishedList(){
+        Collection<Store> c = unfinished.values();
+        List<Store> val = new ArrayList<>(c);
+        return val;
+    }
+
+    public static Store getStoreByLisence(String LisenceId){
+        Store s = finished.get(LisenceId);
+        Store g = unfinished.get(LisenceId);
+        return s == null? s : g;
     }
 }
