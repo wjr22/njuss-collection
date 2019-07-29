@@ -6,21 +6,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="15dp"
+    android:background="@drawable/bg_main"
     tools:context=".MainActivity">
 
     <TextView
-        android:layout_marginTop="150dp"
-
         android:id="@+id/tv_1"
-        android:layout_gravity="center_horizontal"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="220dp"
         android:text="欢迎使用数据采集系统！"
         android:textSize="30sp"
 
         />
     <EditText
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="50dp"
         android:id="@+id/user_name"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -33,13 +34,26 @@
         android:paddingRight="10dp"
         android:maxLines="1"
         />
-
+    <EditText
+        android:layout_marginTop="20dp"
+        android:id="@+id/user_password"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textSize="16sp"
+        android:textColor="#ffad33"
+        android:hint="密码"
+        android:inputType="number"
+        android:background="@drawable/user_name_password"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:maxLines="1"
+        />
     <Button
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_below="@+id/user_name"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/btn_login"
         android:text="登录"
         android:textColor="#FFFFFF"
