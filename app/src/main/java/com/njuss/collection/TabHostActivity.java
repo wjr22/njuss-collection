@@ -7,9 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TabHost;
 import android.widget.TabWidget;
-import android.widget.TextView;
-
-import java.util.Set;
 
 import static com.njuss.collection.R.color.white;
 
@@ -24,7 +21,7 @@ public class TabHostActivity extends TabActivity {
 
         TabHost host = getTabHost();
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_m_tabhost_);
+        setContentView(R.layout.activity_m_tabhost);
         TabHost tabHost = (TabHost) findViewById(android.R.id.tabhost);
         tabHost.setup();
         LayoutInflater inflater = LayoutInflater.from(this);

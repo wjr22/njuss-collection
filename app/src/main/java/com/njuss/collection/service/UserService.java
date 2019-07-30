@@ -105,8 +105,9 @@ public class UserService {
     public boolean checkUserByMobile(String mobile, String pwd) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor cursor = db.query("tGridConductor", null, "conductorMobile=?", new String[]{mobile}, null, null, null);
-        if (cursor.getCount() == 1)
-            if (cursor.getString(cursor.getColumnIndex("conductorPwd")).equals(pwd)){
+        if (cursor.getCount() == 1) {
+            cursor.moveToFirst();
+            if (cursor.getString(cursor.getColumnIndex("conductorPwd")).equals(pwd)) {
                 GridConductor conductor = new GridConductor();
                 conductor.setConductorID(cursor.getInt(cursor.getColumnIndex("conductorID")));
                 conductor.setConductorMobile(cursor.getString(cursor.getColumnIndex("conductorMobile")));
@@ -116,6 +117,7 @@ public class UserService {
                 setMap();
                 return true;
             }
+        }
         return false;
     }
 
