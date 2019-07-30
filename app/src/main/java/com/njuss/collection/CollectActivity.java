@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -59,6 +60,7 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
 
     private Button finish;
 
+    private TextView integrity;
     private static final String LOG_TAG = "AudioRecordTest";
 
     private Store store;
@@ -103,6 +105,8 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
 
         gps = (Button) findViewById(R.id.btn_gps);
 
+        integrity=(TextView)findViewById(R.id.integrity);
+        integrity.setText("完整度"+store.getComplete());
        if(store.getStoreAddress() != null)
             etStoreAddress.setText(store.getStoreAddress());
         if(store.getLicenseID() != null)
