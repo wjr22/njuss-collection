@@ -129,9 +129,11 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
         if(store.getGPSAddress()!= null)
             etGPSAddress.setText(store.getGPSAddress());
         if(store.getConductorID()!= null)
-            etConductorID.setText(store.getConductorID().toString());
-        if(store.getLicensePic() != null)
-            photoIDBtn.setImageBitmap(BitmapFactory.decodeFile(app.generatePicDir()+"Pic.jpg"));
+            etConductorID.setText(String.valueOf(store.getConductorID()));
+        if(store.getLicensePic() != null) {
+            photoIDBtn.setImageBitmap(BitmapFactory.decodeFile(app.generatePicDir() + store.getLicensePic()));
+            Log.d("load pic ", store.getLicensePic());
+        }
         if(store.getStorePicR() != null)
             photoRBtn.setImageBitmap(BitmapFactory.decodeFile(app.generatePicDir()+"PicR.jpg"));
         if(store.getStorePicM() != null)
@@ -167,7 +169,7 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
         photoRBtn.setOnClickListener(this);
         photoIDBtn.setOnClickListener(this);
         photoMBtn.setOnClickListener(this);
-        photoRBtn.setOnClickListener(this);
+        photoLBtn.setOnClickListener(this);
         startOrStopRecord.setOnClickListener(this);
         startOrStopPlay.setOnClickListener(this);
         finish.setOnClickListener(this);
@@ -207,10 +209,10 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
     }
 
     public void uploadData(){
+        //完成度大于80%
+        collectionService.update();
         if(store.getComplete() >= 80){
-            //完成度大于80%
-            collectionService.update();
-
+            Toast.makeText(CollectActivity.this, "完成收集！",Toast.LENGTH_SHORT).show();
         }else{
             Toast.makeText(CollectActivity.this, "完成度过低，请继续完善至80%", Toast.LENGTH_LONG);
         }
@@ -228,30 +230,34 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
                 if (result != null) {
                     photoIDBtn.setImageBitmap(result);
                     fileName = fileName + "Pic.jpg";
+                    store.setLicensePic(fileName);
                 }
             }
         } else if (requestCode == REQUEST_CODE_2) {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 result = data.getParcelableExtra("data");
                 if (result != null) {
-                    photoIDBtn.setImageBitmap(result);
+                    photoLBtn.setImageBitmap(result);
                     fileName = fileName + "PicL.jpg";
+                    store.setStorePicL(fileName);
                 }
             }
         } else if (requestCode == REQUEST_CODE_3) {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 result = data.getParcelableExtra("data");
                 if (result != null){
-                    photoIDBtn.setImageBitmap(result);
+                    photoMBtn.setImageBitmap(result);
                     fileName = fileName + "PicM.jpg";
+                    store.setStorePicM(fileName);
                 }
             }
         } else if (requestCode == REQUEST_CODE_4) {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 result = data.getParcelableExtra("data");
                 if (result != null){
-                    photoIDBtn.setImageBitmap(result);
+                    photoRBtn.setImageBitmap(result);
                     fileName = fileName + "PicR.jpg";
+                    store.setStorePicR(fileName);
                 }
             }
         }
