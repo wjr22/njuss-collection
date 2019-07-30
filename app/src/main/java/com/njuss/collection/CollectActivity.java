@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.njuss.collection.base.CheckPermissionsActivity;
 import com.njuss.collection.base.Global;
 import com.njuss.collection.beans.Store;
 import com.njuss.collection.service.CollectionService;
@@ -35,7 +36,7 @@ import java.io.IOException;
  * @author wangj / weizhaoyang
  *
  */
-public class CollectActivity extends AppCompatActivity  implements  View.OnClickListener{
+public class CollectActivity extends CheckPermissionsActivity implements  View.OnClickListener{
     private static final int REQUEST_CODE_1 = 1;
     private static final int REQUEST_CODE_2 = 2;
     private static final int REQUEST_CODE_3 = 3;
@@ -75,7 +76,7 @@ public class CollectActivity extends AppCompatActivity  implements  View.OnClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_collect);
         Intent intent = getIntent();
         store = (Store)intent.getSerializableExtra("store");
         initView();
@@ -102,10 +103,10 @@ public class CollectActivity extends AppCompatActivity  implements  View.OnClick
 
         gps = (Button) findViewById(R.id.btn_gps);
 
-       /* if(store.getStoreAddress() != null)
+       if(store.getStoreAddress() != null)
             etStoreAddress.setText(store.getStoreAddress());
-        if(store.getConductorID() != null)
-            etLienceID.setText(store.getConductorID());
+        if(store.getLicenseID() != null)
+            etLienceID.setText(store.getConductorID().toString());
         if(store.getStoreName() != null)
             etStoreName.setText(store.getStoreName());
         if(store.getGPSLongitude()!=null)
@@ -115,7 +116,7 @@ public class CollectActivity extends AppCompatActivity  implements  View.OnClick
         if(store.getGPSAddress()!= null)
             etGPSAddress.setText(store.getGPSAddress());
         if(store.getConductorID()!= null)
-            etConductorID.setText(store.getConductorID());*/
+            etConductorID.setText(store.getConductorID().toString());
     }
 
     private void initListener() {

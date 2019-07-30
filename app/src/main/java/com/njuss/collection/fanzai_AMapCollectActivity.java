@@ -39,6 +39,7 @@ import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.GeocodeSearch.OnGeocodeSearchListener;
 import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.amap.api.services.geocoder.RegeocodeResult;
+import com.njuss.collection.base.CheckPermissionsActivity;
 import com.njuss.collection.base.Global;
 import com.njuss.collection.service.GPSDataService;
 
@@ -49,7 +50,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
 
-public class fanzai_AMapCollectActivity extends Activity implements OnClickListener, OnCameraChangeListener, OnGeocodeSearchListener, OnMyLocationChangeListener
+public class fanzai_AMapCollectActivity extends CheckPermissionsActivity implements OnClickListener, OnCameraChangeListener, OnGeocodeSearchListener, OnMyLocationChangeListener
 {
 
     private static final String TAG = "fanzai_AMapCollectActivity";
