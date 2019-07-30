@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.location.GpsStatus;
 import android.location.GpsStatus.Listener;
 import android.location.GpsStatus.NmeaListener;
 import android.location.Location;
@@ -191,7 +192,7 @@ public class GPSDataService extends Service {
             }
             mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, mGPSLocationListener);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                mLocationManager.addNmeaListener((OnNmeaMessageListener) mNmeaListener);
+                //mLocationManager.addNmeaListener(mNmeaListener);
             }
         }
     }
@@ -230,7 +231,7 @@ public class GPSDataService extends Service {
         }
     };
        
-    NmeaListener mNmeaListener = new NmeaListener() {
+    GpsStatus.NmeaListener mNmeaListener = new NmeaListener() {
         @Override
         public void onNmeaReceived(long arg0, String arg1) {
                 if(arg1.contains("GNGGA") || arg1.contains("GPGGA")){

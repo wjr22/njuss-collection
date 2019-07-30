@@ -54,7 +54,7 @@ public class User {
         }
     }
 
-    private static void setConductor(GridConductor _conductor){
+    public static void setConductor(GridConductor _conductor){
         conductor = _conductor;
     }
 

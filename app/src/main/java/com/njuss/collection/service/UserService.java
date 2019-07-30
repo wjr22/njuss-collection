@@ -25,7 +25,7 @@ public class UserService {
 
     private Context context;
 
-    private GridConductor conductor;
+    public GridConductor conductor;
 
     private DBHelper dbHelper;
 

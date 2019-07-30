@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.njuss.collection.base.CheckPermissionsActivity;
 import com.njuss.collection.base.Global;
+import com.njuss.collection.base.User;
 import com.njuss.collection.beans.Store;
 import com.njuss.collection.service.CollectionService;
 
@@ -115,11 +116,13 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
         gps = (Button) findViewById(R.id.btn_gps);
 
         integrity=(TextView)findViewById(R.id.integrity);
-        integrity.setText("完整度"+store.getComplete());
+        integrity.setText("完整度"+ String.valueOf(store.getComplete() == null ? 0: store.getComplete()));
        if(store.getStoreAddress() != null)
             etStoreAddress.setText(store.getStoreAddress());
-        if(store.getLicenseID() != null)
-            etLienceID.setText(store.getConductorID().toString());
+        if(store.getLicenseID() != null) {
+            etLienceID.setText(store.getLicenseID());
+            Log.d("info", store.getLicenseID());
+        }
         if(store.getStoreName() != null)
             etStoreName.setText(store.getStoreName());
         if(store.getGPSLongitude()!=null)
@@ -128,8 +131,7 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
             etGPSLatitude.setText(store.getGPSLatitude());
         if(store.getGPSAddress()!= null)
             etGPSAddress.setText(store.getGPSAddress());
-        if(store.getConductorID()!= null)
-            etConductorID.setText(String.valueOf(store.getConductorID()));
+        etConductorID.setText(User.getConductor().getConductorName());
         if(store.getLicensePic() != null) {
             photoIDBtn.setImageBitmap(BitmapFactory.decodeFile(app.generatePicDir() + store.getLicensePic()));
             Log.d("load pic ", store.getLicensePic());
@@ -202,7 +204,7 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
                 uploadData();
                 break;
             case R.id.btn_gps:
-                Intent it = new Intent(CollectActivity.this, fanzai_AMapCollectActivity.class);
+                Intent it = new Intent(CollectActivity.this, LocationActivity.class);
                 startActivity(it);
                 break;
         }
@@ -210,13 +212,24 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
 
     public void uploadData(){
         //完成度大于80%
+        collectionService.setStore(store);
         collectionService.update();
         if(store.getComplete() >= 80){
             Toast.makeText(CollectActivity.this, "完成收集！",Toast.LENGTH_SHORT).show();
+            Log.d("---", "uploadData: >=80");
+            finish();
         }else{
-            Toast.makeText(CollectActivity.this, "完成度过低，请继续完善至80%", Toast.LENGTH_LONG);
+            Toast.makeText(CollectActivity.this, "完成度过低，请继续完善至80%", Toast.LENGTH_LONG).show();
+            Log.d("---", "uploadData: <=80");
+            Log.d("---", "uploadData: pic " +store.getLicensePic());
+            Log.d("---", "uploadData: picL "+store.getStorePicL());
+            Log.d("---", "uploadData: picM "+store.getStorePicM());
+            Log.d("---", "uploadData: picR "+store.getStorePicR());
+            Log.d("---", "uploadData: gps1"+store.getGPSLongitude());
+            Log.d("---", "uploadData: gps2"+store.getGPSLatitude());
+            finish();
         }
-        finish();
+
     }
 
     @Override

@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("get msg string is ...", name +"======");
                 UserService userService = new UserService(getApplicationContext());
                 if(userService.checkUserByMobile(name)) {
+                    User.setInstance(userService.conductor);
                     User.setFinished(userService.finished);
                     User.setUnfinished(userService.unfinished);
                     Log.d("SSS", User.getUnfinished().size() +"========");

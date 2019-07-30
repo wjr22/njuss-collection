@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.njuss.collection.base.User;
 import com.njuss.collection.beans.Store;
+import com.njuss.collection.service.UserService;
 
 import java.io.Serializable;
 import java.util.List;
@@ -34,6 +35,25 @@ public class ListViewActivityr extends AppCompatActivity {
         setContentView(R.layout.tab2);
         lv = findViewById(R.id.list_view2);
 
+        //1.数据准备
+        data = User.getFinishedList();
+        //2.创建自定义适配器
+        mba = new MyBaseAdapt((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE));
+        //3.为listView设置适配器
+        lv.setAdapter(mba);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshData();//刷新数据
+    }
+
+    public void refreshData(){
+        // 更新数据
+        UserService userService = new UserService(getApplicationContext());
+        userService.setMap();
+        User.setFinished(userService.finished);
         //1.数据准备
         data = User.getFinishedList();
         //2.创建自定义适配器
