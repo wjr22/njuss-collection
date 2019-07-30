@@ -179,7 +179,7 @@ public class LocationActivity extends CheckPermissionsActivity {
                 markerOptions.position(new LatLng(lat, lon));
                 markerOptions.title("我的位置");
                 markerOptions.visible(true);
-                BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.icon_location));
+                BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.diaoyan_pos));
                 markerOptions.icon(bitmapDescriptor);
                 markerOptions.draggable(true);
                 Marker marker = aMap.addMarker(markerOptions);

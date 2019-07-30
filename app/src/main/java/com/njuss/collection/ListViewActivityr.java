@@ -44,11 +44,11 @@ public class ListViewActivityr extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        refreshData();//刷新数据
-    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        super.onActivityResult(requestCode, resultCode, data);
+        refreshData();
+    }
     public void refreshData(){
         // 更新数据
         UserService userService = new UserService(getApplicationContext());
@@ -57,7 +57,7 @@ public class ListViewActivityr extends AppCompatActivity {
         //1.数据准备
         data = User.getFinishedList();
         //2.创建自定义适配器
-        mba = new MyBaseAdapt((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE));
+        mba = new ListViewActivityr.MyBaseAdapt((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE));
         //3.为listView设置适配器
         lv.setAdapter(mba);
     }
@@ -109,7 +109,7 @@ public class ListViewActivityr extends AppCompatActivity {
             }
 
 
-            ListViewActivity.MyBaseAdapt.ViewHolder vh = (ListViewActivity.MyBaseAdapt.ViewHolder) v.getTag();
+            ViewHolder vh = (ViewHolder) v.getTag();
             final Store store = data.get(i);
 
             vh.tv_listviewitme_storename.setText(store.getStoreName());
@@ -123,7 +123,7 @@ public class ListViewActivityr extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent it = new Intent(ListViewActivityr.this, CollectActivity.class);
                     it.putExtra("store", (Serializable) store);
-                    startActivity(it);
+                    startActivityForResult(it, 11);
                 }
             });
             return v;

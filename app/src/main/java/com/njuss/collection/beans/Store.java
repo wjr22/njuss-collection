@@ -131,17 +131,7 @@ public class Store implements Serializable {
         return Objects.hash(licenseID);
     }
 
-    @Override
-    public String toString() {
-        return "Store{" +
-                "licenseID='" + licenseID + '\'' +
-                ", storeName='" + storeName + '\'' +
-                ", storeAddress='" + storeAddress + '\'' +
-                ", GPSAddress='" + GPSAddress + '\'' +
-                ", GPSLongitude='" + GPSLongitude + '\'' +
-                ", GPSLatitude='" + GPSLatitude + '\'' +
-                '}';
-    }
+
 
     public Integer getComplete() {
         return complete;
@@ -149,5 +139,23 @@ public class Store implements Serializable {
 
     public void setComplete(Integer complete) {
         this.complete = complete;
+    }
+
+    @Override
+    public String toString() {
+        return "Store{" +
+                "licenseID='" + licenseID + '\'' +
+                ", conductorID=" + conductorID +
+                ", storeName='" + storeName + '\'' +
+                ", storeAddress='" + storeAddress + '\'' +
+                ", GPSAddress='" + GPSAddress + '\'' +
+                ", GPSLongitude='" + GPSLongitude + '\'' +
+                ", GPSLatitude='" + GPSLatitude + '\'' +
+                ", storePicM='" + storePicM + '\'' +
+                ", storePicL='" + storePicL + '\'' +
+                ", storePicR='" + storePicR + '\'' +
+                ", licensePic='" + licensePic + '\'' +
+                ", complete=" + complete +
+                '}';
     }
 }

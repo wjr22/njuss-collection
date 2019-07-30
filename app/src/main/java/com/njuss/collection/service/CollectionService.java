@@ -44,7 +44,7 @@ public class CollectionService {
     public void setStore(Store store) {
 
         this.store = store;
-        store.setComplete(calcComplete());
+        store.setComplete(calcComplete(this.store));
     }
 
     public boolean update(){
@@ -66,7 +66,7 @@ public class CollectionService {
         return true;
     }
 
-    public int calcComplete(){
+    public static int calcComplete(Store store){
         int res = 0;
         if(store.getGPSAddress() != null)
             res += 17;

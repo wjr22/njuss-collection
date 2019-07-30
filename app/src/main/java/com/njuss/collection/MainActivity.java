@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Log.d("SHA1 ====", App.sHA1(getApplicationContext()));
         mBtnLogin = (Button)findViewById(R.id.btn_login);
         edtUserName = (EditText)findViewById(R.id.user_name);
         edtUserPassword = (EditText)findViewById(R.id.user_password);

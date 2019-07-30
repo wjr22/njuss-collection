@@ -43,26 +43,32 @@ public class ListViewActivity extends AppCompatActivity {
         lv = findViewById(R.id.list_view);
         //1.数据准备
         data = User.getUnfinishedList();
-        Log.d("LOADING DATA --", "SUM "+ data.size()+"======");
         //2.创建自定义适配器
         mba = new MyBaseAdapt((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE));
         //3.为listView设置适配器
         lv.setAdapter(mba);
     }
 
+    /**
+     * 返回刷新数据
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
-    protected void onResume() {
-        super.onResume();
-        refreshData();//刷新数据
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+        refreshData();
     }
 
     public void refreshData(){
         // 更新数据
         UserService userService = new UserService(getApplicationContext());
         userService.setMap();
-        User.setFinished(userService.finished);
+        User.setUnfinished(userService.unfinished);
         //1.数据准备
-        data = User.getFinishedList();
+        data = User.getUnfinishedList();
         //2.创建自定义适配器
         mba = new ListViewActivity.MyBaseAdapt((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE));
         //3.为listView设置适配器
@@ -129,10 +135,11 @@ public class ListViewActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent it = new Intent(ListViewActivity.this, CollectActivity.class);
                     it.putExtra("store", store);
-                    startActivity(it);
+                    startActivityForResult(it, 11);
                 }
             });
             return v;
         }
     }
+
 }

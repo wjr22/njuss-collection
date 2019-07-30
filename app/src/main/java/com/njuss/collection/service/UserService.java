@@ -64,7 +64,7 @@ public class UserService {
             store.setConductorID(cursor.getInt(cursor.getColumnIndex("conductorID")));
             store.setStorePicM(cursor.getString(cursor.getColumnIndex("storePicM")));
             store.setStorePicR(cursor.getString(cursor.getColumnIndex("storePicR")));
-            if(store.getStoreAddress() == null){
+            if(CollectionService.calcComplete(store) <= 80){
                 Log.d("unfinished stores list ", "add One "+ store.getLicenseID()+" =====");
                 unfinished.put(store.getLicenseID(), store);
             }else{

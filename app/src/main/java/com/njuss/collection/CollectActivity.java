@@ -120,6 +120,7 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
     }
     private void initView() {
         App app = (App)getApplication();
+        Log.d("info ====", store.toString());
         photoIDBtn = (ImageView) findViewById(R.id.iv_licensePic);
         photoMBtn = (ImageView) findViewById(R.id.iv_storePicM);
         photoLBtn = (ImageView) findViewById(R.id.iv_storePicL);
@@ -159,15 +160,15 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
             etGPSAddress.setText(store.getGPSAddress());
         etConductorID.setText(User.getConductor().getConductorName());
         if(store.getLicensePic() != null) {
-            photoIDBtn.setImageBitmap(BitmapFactory.decodeFile(app.generatePicDir() + store.getLicensePic()));
+            photoIDBtn.setImageBitmap(BitmapFactory.decodeFile(app.generatePicDir() + "/"+store.getLicensePic()));
             Log.d("load pic ", store.getLicensePic());
         }
         if(store.getStorePicR() != null)
-            photoRBtn.setImageBitmap(BitmapFactory.decodeFile(app.generatePicDir()+"PicR.jpg"));
+            photoRBtn.setImageBitmap(BitmapFactory.decodeFile(app.generatePicDir()+"/"+store.getStorePicR()));
         if(store.getStorePicM() != null)
-            photoMBtn.setImageBitmap(BitmapFactory.decodeFile(app.generatePicDir()+"PicM.jpg"));
+            photoMBtn.setImageBitmap(BitmapFactory.decodeFile(app.generatePicDir()+"/"+store.getStorePicM()));
         if(store.getStorePicL() != null)
-            photoLBtn.setImageBitmap(BitmapFactory.decodeFile(app.generatePicDir()+"PicL.jpg"));
+            photoLBtn.setImageBitmap(BitmapFactory.decodeFile(app.generatePicDir()+"/"+store.getStorePicL()));
 
         /*startRecord = (ImageButton) findViewById(R.id.btn_startrecord);
         startRecord.setOnClickListener(new startRecordListener());
@@ -229,13 +230,12 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
             case R.id.btn_stopplay:
                 stopplayer();
                 break;
-
             case R.id.btn_finish:
                 uploadData();
                 break;
             case R.id.btn_gps:
-                Intent it = new Intent(CollectActivity.this, LocationActivity.class);
-                startActivity(it);
+                Intent it = new Intent(CollectActivity.this, GaodeLocationActivity.class);
+                startActivityForResult(it,100);
                 break;
         }
     }
@@ -247,6 +247,12 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
         if(store.getComplete() >= 80){
             Toast.makeText(CollectActivity.this, "完成收集！",Toast.LENGTH_SHORT).show();
             Log.d("---", "uploadData: >=80");
+            Log.d("---", "uploadData: pic " +store.getLicensePic());
+            Log.d("---", "uploadData: picL "+store.getStorePicL());
+            Log.d("---", "uploadData: picM "+store.getStorePicM());
+            Log.d("---", "uploadData: picR "+store.getStorePicR());
+            Log.d("---", "uploadData: gps1"+store.getGPSLongitude());
+            Log.d("---", "uploadData: gps2"+store.getGPSLatitude());
             finish();
         }else{
             Toast.makeText(CollectActivity.this, "完成度过低，请继续完善至80%", Toast.LENGTH_LONG).show();
@@ -322,11 +328,30 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
                 try {
                     fos.flush();
                     fos.close();
+                    Log.d("OUTPUT PIC ==", file.getAbsolutePath()+file.getName());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
 
+        }
+
+        if(requestCode == 100 && resultCode == 101){
+            String Longitute = data.getStringExtra("GPSLongitude");
+            String GPSLatitude=data.getStringExtra("GPSLatitude");
+            String location = data.getStringExtra("location");
+            Log.d("GPS location ====", location);
+            Log.d("GPS Longitute ====", Longitute);
+            Log.d("GPS Latitude ====", GPSLatitude);
+            store.setGPSLongitude(Longitute);
+            store.setGPSLatitude(GPSLatitude);
+            store.setGPSAddress(location);
+            if(store.getGPSLongitude()!=null)
+                etGPSLongitute.setText(store.getGPSLongitude());
+            if(store.getGPSLatitude()!= null)
+                etGPSLatitude.setText(store.getGPSLatitude());
+            if(store.getGPSAddress()!= null)
+                etGPSAddress.setText(store.getGPSAddress());
         }
     }
 

@@ -64,7 +64,6 @@ public class fanzai_AMapCollectActivity extends CheckPermissionsActivity impleme
     private TextView state_text_gps;
     private TextView location_type;
     private TextView headinfo;
-    private TextView otherinfo;
     private TextView poiname;
     private TextView addressname;
     private TextView mapgps;
@@ -83,6 +82,12 @@ public class fanzai_AMapCollectActivity extends CheckPermissionsActivity impleme
     private ImageView compass;
     private long mPressedTime = 0;
     private LatLng nowLatLng = null;
+
+    private String location;
+
+    private String GPSLongitude;
+
+    private String GPSLatitude;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +101,6 @@ public class fanzai_AMapCollectActivity extends CheckPermissionsActivity impleme
         state_text_gps = (TextView) findViewById(R.id.state_text_gps);
         location_type= (TextView) findViewById(R.id.location_type);
         headinfo= (TextView) findViewById(R.id.headinfo);
-        otherinfo= (TextView) findViewById(R.id.otherinfo);
         poiname = (TextView) findViewById(R.id.poiname);
         addressname= (TextView) findViewById(R.id.addressname);
         mapgps = (TextView) findViewById(R.id.mapgps);
@@ -154,41 +158,12 @@ public class fanzai_AMapCollectActivity extends CheckPermissionsActivity impleme
         gpsservice = new Intent(this, GPSDataService.class);
         startService(gpsservice);
         
-        writeAllCellInfo();
+        //writeAllCellInfo();
         
         Timer timer = new Timer();
         timer.schedule(titask, 1000, 1000);
     }
 
-    private void writeAllCellInfo()
-    {
-        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ALL);
-        
-        String content = "";
-        content += "硬件制造商:" + android.os.Build.MANUFACTURER + "\n";
-        content += "品牌名称:" + android.os.Build.BRAND + "\n";
-        content += "主板名称:" + android.os.Build.BOARD + "\n";
-        content += "设备名:" + android.os.Build.DEVICE + "\n";
-        content += "手机型号:" + android.os.Build.MODEL + "\n";
-        content += "产品名称:" + android.os.Build.PRODUCT + "\n";
-        content += "设备识别码:" + android.os.Build.FINGERPRINT + "\n";
-        content += "硬件序列号:" + android.os.Build.ID + "\n";
-        content += "安卓版本号:" + android.os.Build.VERSION.RELEASE + "\n";
-        content += "指令集名称:" + android.os.Build.CPU_ABI + "\n";
-        content += "传感器列表:" + "\n";
-        
-        for (Sensor item : sensors) {
-            content +=
-                item.getName() + ",  " + ",  版本:" +
-                item.getVersion() + ",  厂商:" + item.getVendor() + ",  分辨率:" + 
-                item.getResolution() + ",  量程:" + item.getMaximumRange() + ",  能耗:" + 
-                item.getPower() + ",  最小间隔:" + item.getMinDelay() + "\n";
-        }
-        
-        //TxtUtil.saveTxt(content, Global.sensorPath+"phone_sensor/", "phone_sensor_" + Global.dayFormat.format(new Date()) + ".txt");
-    }
-    
     @Override
     public void onMyLocationChange(android.location.Location location)
     {
@@ -319,6 +294,12 @@ public class fanzai_AMapCollectActivity extends CheckPermissionsActivity impleme
         {
             Toast.makeText(getApplicationContext(), "停止采集",Toast.LENGTH_SHORT).show();
             btn_collect.setText("开始采集");
+            Intent it = new Intent();
+            it.putExtra("location", location);
+            it.putExtra("GPSLatitude",GPSLatitude);
+            it.putExtra("GPSLongitude", GPSLongitude);
+            setResult(101, it);
+            finish();
         }
     }
     
@@ -349,7 +330,8 @@ public class fanzai_AMapCollectActivity extends CheckPermissionsActivity impleme
                         //更新坐标信息
                         String gpscoord = "经度：" + Global.decimalFormat.format(log) +
                                           "°,  纬度：" + Global.decimalFormat.format(lat) + "°" ;
-                        txt_posinfo.setText(gpscoord);                       
+                        txt_posinfo.setText(gpscoord);
+
                     }
                     setGPSState();
                 }
@@ -383,7 +365,6 @@ public class fanzai_AMapCollectActivity extends CheckPermissionsActivity impleme
                     headinfo.setText(testString);
                     
                     testString = "光照强度：" + Global.LIGHT + "lx, 距离：" + Global.PROXIMITY + "cm, 气压：" + Global.decimal3Format.format(Global.PRESSURE) + "hPa";
-                    otherinfo.setText(testString);
                     
                     if(Global.isCollect)
                     {
@@ -541,6 +522,7 @@ public class fanzai_AMapCollectActivity extends CheckPermissionsActivity impleme
         String formatAoi = result.getRegeocodeAddress().getAois().get(0).getAoiName();
         poiname.setText("选点位置:" + formatAoi);
         addressname.setText("地址:" + formatAddress);
+
     }
     
 }
