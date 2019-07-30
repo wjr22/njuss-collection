@@ -60,10 +60,29 @@ public class CollectionService {
         values.put("storePicM",store.getStorePicM());
         values.put("storePicL",store.getStorePicL());
         values.put("storePicR",store.getStorePicR());
-        db.update("tStores", values, "license=?", new String[]{store.getLicenseID()});
+        db.update("tStores", values, "licenseID=?", new String[]{store.getLicenseID()});
         return true;
     }
 
+    public int calcComplete(){
+        int res = 0;
+        if(store.getGPSAddress() != null)
+            res += 17;
+        if(store.getGPSLatitude() != null)
+            res += 17;
+        if(store.getGPSLongitude() != null)
+            res += 17;
+        if(store.getStorePicL() != null)
+            res += 17;
+        if(store.getStorePicM() != null)
+            res += 17;
+        if(store.getStorePicR() != null)
+            res += 17;
+        if(store.getLicensePic() != null)
+            res += 17;
+        store.setComplete(res);
+        return store.getComplete();
+    }
 
     public static class Builder{
         private Store   store;
