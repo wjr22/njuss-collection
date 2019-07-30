@@ -1,12 +1,15 @@
 package com.njuss.collection;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -20,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.njuss.collection.base.CheckPermissionsActivity;
 import com.njuss.collection.base.Global;
@@ -43,6 +47,7 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
     private static final int REQUEST_CODE_2 = 2;
     private static final int REQUEST_CODE_3 = 3;
     private static final int REQUEST_CODE_4 = 4;
+    private static final String TAG = "录音";
 
     private ImageView photoIDBtn;
     private ImageView photoLBtn;
@@ -67,28 +72,46 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
     private Store store;
 
     //界面控件
-    private ImageButton startOrStopRecord;
-    private ImageButton startOrStopPlay;
-    //界面控件
     private ImageButton startRecord;
     private ImageButton startPlay;
     private ImageButton stopRecord;
     private ImageButton stopPlay;
     //语音操作对象
-    private MediaPlayer mPlayer = null;
-    private MediaRecorder mRecorder = null;
+
     // 音频路径
     private String FileName;
     private String mediaName;
 
     private CollectionService collectionService ;
 
+    private RecordPlayer player;
+    private MediaRecorder mediaRecorder;
+    private File recordFile;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collect);
+        //检测是否有录音权限
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            Log.i(TAG, "默认无录音权限");
+            if (Build.VERSION.SDK_INT >= 23) {
+                Log.i(TAG, "系统版本不低于android6.0 ，需要动态申请权限");
+                requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, 1001);
+            }
+        } else {
+            Log.i(TAG, "默认有录音权限");
+        }
+
         Intent intent = getIntent();
         store = (Store)intent.getSerializableExtra("store");
+        recordFile = new File(((App)getApplication()).generatePicDir(), store.getLicenseID()+".amr");
+
+       /* mediaName = store.getLicenseID()+".amr";
+        FileName = ((App)getApplication()).generatePicDir()+mediaName;*/
+
         initView();
         initListener();
         collectionService = new CollectionService(getApplicationContext());
@@ -100,8 +123,6 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
         photoMBtn = (ImageView) findViewById(R.id.iv_storePicM);
         photoLBtn = (ImageView) findViewById(R.id.iv_storePicL);
         photoRBtn = (ImageView) findViewById(R.id.iv_storePicR);
-        startOrStopRecord = (ImageButton) findViewById(R.id.btn_startrecord);
-        startOrStopPlay = (ImageButton) findViewById(R.id.btn_startplay);
         finish = (Button) findViewById(R.id.btn_finish);
 
         etConductorID = (EditText)findViewById(R.id.et_conductorID);
@@ -112,10 +133,16 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
         etLienceID = (EditText)findViewById(R.id.et_licenseID);
         etStoreAddress = (EditText) findViewById(R.id.et_storeAddress);
 
+        startRecord = (ImageButton) findViewById(R.id.btn_startrecord);
+        stopRecord = (ImageButton) findViewById(R.id.btn_stoprecord);
+        startPlay = (ImageButton) findViewById(R.id.btn_startplay);
+        stopPlay = (ImageButton) findViewById(R.id.btn_stopplay);
+
         gps = (Button) findViewById(R.id.btn_gps);
 
-        integrity=(TextView)findViewById(R.id.integrity);
+        integrity=(TextView)findViewById(R.id.integrity);//获取完整度
         integrity.setText("完整度"+store.getComplete());
+
        if(store.getStoreAddress() != null)
             etStoreAddress.setText(store.getStoreAddress());
         if(store.getLicenseID() != null)
@@ -141,28 +168,20 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
         if(store.getStorePicL() != null)
             photoLBtn.setImageBitmap(BitmapFactory.decodeFile(app.generatePicDir()+"PicL.jpg"));
 
-        startRecord = (ImageButton) findViewById(R.id.btn_startrecord);
-
+        /*startRecord = (ImageButton) findViewById(R.id.btn_startrecord);
         startRecord.setOnClickListener(new startRecordListener());
-
         //结束录音
         stopRecord = (ImageButton) findViewById(R.id.btn_stoprecord);
-
         stopRecord.setOnClickListener(new stopRecordListener());
-
         //开始播放
         startPlay = (ImageButton) findViewById(R.id.btn_startplay);
-
-        //绑定监听器
         startPlay.setOnClickListener(new startPlayListener());
-
         //结束播放
         stopPlay = (ImageButton) findViewById(R.id.btn_stopplay);
-
         stopPlay.setOnClickListener(new stopPlayListener());
 
         mediaName = store.getLicenseID()+".amr";
-        FileName = ((App)getApplication()).generatePicDir()+mediaName;
+        FileName = ((App)getApplication()).generatePicDir()+mediaName;*/
     }
 
     private void initListener() {
@@ -170,14 +189,18 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
         photoIDBtn.setOnClickListener(this);
         photoMBtn.setOnClickListener(this);
         photoLBtn.setOnClickListener(this);
-        startOrStopRecord.setOnClickListener(this);
-        startOrStopPlay.setOnClickListener(this);
         finish.setOnClickListener(this);
         gps.setOnClickListener(this);
+
+        startRecord.setOnClickListener(this);
+        stopRecord.setOnClickListener(this);
+        startPlay.setOnClickListener(this);
+        stopPlay.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
+        player = new RecordPlayer(CollectActivity.this);
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         switch (view.getId()){
             case R.id.iv_licensePic:
@@ -192,12 +215,20 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
             case R.id.iv_storePicR:
                 startActivityForResult(intent, REQUEST_CODE_4);
                 break;
-            case R.id.btn_startrecord:
 
+            case R.id.btn_startrecord://录音部分
+                startRecording();
+                break;
+            case R.id.btn_stoprecord:
+                stopRecording();
                 break;
             case R.id.btn_startplay:
-
+                playRecording();
                 break;
+            case R.id.btn_stopplay:
+                stopplayer();
+                break;
+
             case R.id.btn_finish:
                 uploadData();
                 break;
@@ -286,12 +317,64 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
 
         }
     }
-    class startRecordListener implements View.OnClickListener {
+
+    private void startRecording() {
+        mediaRecorder = new MediaRecorder();
+
+        // 判断，若当前文件已存在，则删除
+        if (recordFile.exists()) {
+            recordFile.delete();
+        }
+        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+        mediaRecorder.setOutputFile(recordFile.getAbsolutePath());
+
+        try {
+            // 准备好开始录音
+            mediaRecorder.prepare();
+            mediaRecorder.start();
+            Toast.makeText(this, "正在录音", Toast.LENGTH_SHORT).show();
+        } catch (IllegalStateException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+
+    private void stopRecording() {
+        if (recordFile != null) {
+            mediaRecorder.stop();
+            Toast.makeText(this, "停止录音", Toast.LENGTH_SHORT).show();
+            mediaRecorder.release();
+        }
+    }
+
+    private void playRecording() {
+        Toast.makeText(this, "播放录音", Toast.LENGTH_SHORT).show();
+        player.playRecordFile(recordFile);
+    }
+
+    private void stopplayer() {
+        // TODO Auto-generated method stub
+        Toast.makeText(this, "停止播放", Toast.LENGTH_SHORT).show();
+        player.stopPalyer();
+    }
+
+}
+
+
+
+
+
+    /*class startRecordListener implements View.OnClickListener {
 
         @Override
         public void onClick(View v) {
             // TODO Auto-generated method stub
-
             mRecorder = new MediaRecorder();
             mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
@@ -303,10 +386,6 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
                 Log.e(LOG_TAG, "prepare() failed");
             }
             mRecorder.start();
-
-
-
-
         }
 
     }
@@ -316,17 +395,10 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
         @Override
         public void onClick(View v) {
             // TODO Auto-generated method stub
-
             mRecorder.stop();
             mRecorder.release();
             mRecorder = null;
-
-
-
-
         }
-
-
     }
     //播放录音
     class startPlayListener implements View.OnClickListener {
@@ -343,10 +415,6 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
             }catch(IOException e){
                 Log.e(LOG_TAG,"播放失败");
             }
-
-
-
-
         }
 
     }
@@ -359,12 +427,11 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
 
             mPlayer.release();
             mPlayer = null;
-
-
-
-
         }
 
-    }
+    }*/
 
-}
+
+
+
+
