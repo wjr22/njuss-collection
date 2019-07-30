@@ -45,8 +45,6 @@ public class App extends Application {
     }
 
     /**
-     * @TODO 存储图片的路径，先判断外存，再生成
-     *
      * @return dir path
      */
     public String generatePicDir() {
@@ -71,12 +69,14 @@ public class App extends Application {
             }
             rootDir = dir.getAbsolutePath();
         }
-        Log.d("OUTPUT PIC in :", rootDir);
         //rootDir += "/Tobacco/Pic/";
-        File dir = new File(rootDir, "Tobacco");
-        if(dir.mkdirs())
-            Log.d("GENERATE DIR ", "generatePicDir: SUCCESS! ======");
-        else Log.d("GENERATE DIR ", "generatePicDir: FAILED! ======");
+        File dir = new File(rootDir, "Tobacco/Pic");
+        if(!dir.exists())
+            if(dir.mkdirs())
+                Log.d("GENERATE DIR ", "generatePicDir: SUCCESS! ======");
+            else Log.d("GENERATE DIR ", "generatePicDir: FAILED! ======");
+
+        Log.d("OUTPUT PIC in :", dir.getAbsolutePath());
         return rootDir;
     }
 
