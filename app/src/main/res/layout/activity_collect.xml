@@ -222,7 +222,7 @@
 
             <Button
                 android:id="@+id/btn_gps"
-                android:layout_marginLeft="100dp"
+                android:layout_marginLeft="50dp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="开始定位" />
@@ -418,44 +418,43 @@
             android:layout_width="match_parent"
             android:layout_height="80dp">
             <ImageButton
-
+                android:id="@+id/btn_startrecord"
                 android:layout_margin="4dp"
                 android:layout_marginRight="2dp"
                 android:layout_marginLeft="2dp"
                 android:background="@drawable/btn_photo_rectangle"
                 android:layout_weight="1"
-                android:id="@+id/btn_startrecord"
                 android:src="@mipmap/img_btn_startrecord"
 
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"/>
 
             <ImageButton
+                android:id="@+id/btn_stoprecord"
                 android:layout_margin="4dp"
                 android:layout_marginRight="2dp"
                 android:layout_marginLeft="2dp"
                 android:background="@drawable/btn_photo_rectangle"
                 android:layout_weight="1"
-                android:id="@+id/btn_stoprecord"
                 android:src="@mipmap/img_btn_stoprecord"
 
                 android:layout_width="wrap_content"
                 android:layout_height="70dp" />
             <ImageButton
+                android:id="@+id/btn_startplay"
                 android:layout_margin="4dp"
                 android:src="@mipmap/img_btn_startplay"
                 android:layout_marginRight="2dp"
                 android:layout_marginLeft="2dp"
                 android:background="@drawable/btn_photo_rectangle"
                 android:layout_weight="1"
-                android:id="@+id/btn_startplay"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp" />
 
             <ImageButton
+                android:id="@+id/btn_stopplay"
                 android:layout_margin="4dp"
                 android:layout_weight="1"
-                android:id="@+id/btn_stopplay"
                 android:src="@mipmap/img_btn_stopplay"
                 android:layout_marginRight="2dp"
                 android:layout_marginLeft="2dp"
