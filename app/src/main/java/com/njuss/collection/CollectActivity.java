@@ -69,10 +69,17 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
     //界面控件
     private ImageButton startOrStopRecord;
     private ImageButton startOrStopPlay;
-
+    //界面控件
+    private ImageButton startRecord;
+    private ImageButton startPlay;
+    private ImageButton stopRecord;
+    private ImageButton stopPlay;
     //语音操作对象
     private MediaPlayer mPlayer = null;
     private MediaRecorder mRecorder = null;
+    // 音频路径
+    private String FileName;
+    private String mediaName;
 
     private CollectionService collectionService ;
 
@@ -273,6 +280,85 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
 
         }
     }
+    class startRecordListener implements View.OnClickListener {
 
+        @Override
+        public void onClick(View v) {
+            // TODO Auto-generated method stub
+
+            mRecorder = new MediaRecorder();
+            mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            mRecorder.setOutputFile(FileName);
+            mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+            try {
+                mRecorder.prepare();
+            } catch (IOException e) {
+                Log.e(LOG_TAG, "prepare() failed");
+            }
+            mRecorder.start();
+
+
+
+
+        }
+
+    }
+    //停止录音
+    class stopRecordListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            // TODO Auto-generated method stub
+
+            mRecorder.stop();
+            mRecorder.release();
+            mRecorder = null;
+
+
+
+
+        }
+
+
+    }
+    //播放录音
+    class startPlayListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            // TODO Auto-generated method stub
+
+            mPlayer = new MediaPlayer();
+            try{
+                mPlayer.setDataSource(FileName);
+                mPlayer.prepare();
+                mPlayer.start();
+            }catch(IOException e){
+                Log.e(LOG_TAG,"播放失败");
+            }
+
+
+
+
+        }
+
+    }
+    //停止播放录音
+    class stopPlayListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            // TODO Auto-generated method stub
+
+            mPlayer.release();
+            mPlayer = null;
+
+
+
+
+        }
+
+    }
 
 }
