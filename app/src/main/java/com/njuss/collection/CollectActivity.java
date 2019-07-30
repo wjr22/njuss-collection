@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -94,6 +95,7 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
         collectionService.setStore(store);
     }
     private void initView() {
+        App app = (App)getApplication();
         photoIDBtn = (ImageView) findViewById(R.id.iv_licensePic);
         photoMBtn = (ImageView) findViewById(R.id.iv_storePicM);
         photoLBtn = (ImageView) findViewById(R.id.iv_storePicL);
@@ -126,6 +128,14 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
             etGPSAddress.setText(store.getGPSAddress());
         if(store.getConductorID()!= null)
             etConductorID.setText(store.getConductorID().toString());
+        if(store.getLicensePic() != null)
+            photoIDBtn.setImageBitmap(BitmapFactory.decodeFile(app.generatePicDir()+"Pic.jpg"));
+        if(store.getStorePicR() != null)
+            photoRBtn.setImageBitmap(BitmapFactory.decodeFile(app.generatePicDir()+"PicR.jpg"));
+        if(store.getStorePicM() != null)
+            photoMBtn.setImageBitmap(BitmapFactory.decodeFile(app.generatePicDir()+"PicM.jpg"));
+        if(store.getStorePicL() != null)
+            photoLBtn.setImageBitmap(BitmapFactory.decodeFile(app.generatePicDir()+"PicL.jpg"));
 
         startRecord = (ImageButton) findViewById(R.id.btn_startrecord);
 
@@ -200,10 +210,11 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
         if(store.getComplete() >= 80){
             //完成度大于80%
             collectionService.update();
+
         }else{
             Toast.makeText(CollectActivity.this, "完成度过低，请继续完善至80%", Toast.LENGTH_LONG);
         }
-
+        finish();
     }
 
     @Override

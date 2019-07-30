@@ -42,7 +42,9 @@ public class CollectionService {
     }
 
     public void setStore(Store store) {
+
         this.store = store;
+        store.setComplete(calcComplete());
     }
 
     public boolean update(){

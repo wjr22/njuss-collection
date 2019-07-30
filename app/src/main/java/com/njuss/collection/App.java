@@ -77,7 +77,7 @@ public class App extends Application {
             else Log.d("GENERATE DIR ", "generatePicDir: FAILED! ======");
 
         Log.d("OUTPUT PIC in :", dir.getAbsolutePath());
-        return rootDir;
+        return dir.getAbsolutePath();
     }
 
     private static String getStoragePath(Context mContext, boolean is_removale) {
