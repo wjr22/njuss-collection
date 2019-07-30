@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:text="XXX烟草销售点信息采集"
             android:textColor="#ffffff"
-            android:textSize="33sp" />
+            android:textSize="30sp" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
 
             <EditText
                 android:id="@+id/et_storeName"
-                android:layout_width="wrap_content"
+                android:layout_width="305dp"
                 android:layout_height="match_parent"
                 android:focusable="false"
                 android:gravity="center"
@@ -88,13 +88,13 @@
 
             <EditText
                 android:id="@+id/et_licenseID"
-                android:gravity="center"
-                android:text=""
+                android:layout_width="305dp"
+                android:layout_height="wrap_content"
                 android:focusable="false"
+                android:gravity="center"
                 android:inputType="textMultiLine"
                 android:minLines="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:text=""
                 android:textSize="8sp" />
         </LinearLayout>
         <LinearLayout
@@ -114,13 +114,13 @@
 
             <EditText
                 android:id="@+id/et_GPSAddress"
-                android:gravity="center"
-                android:text=""
+                android:layout_width="305dp"
+                android:layout_height="wrap_content"
                 android:focusable="false"
+                android:gravity="center"
                 android:inputType="textMultiLine"
                 android:minLines="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:text=""
                 android:textSize="7sp" />
         </LinearLayout>
         <LinearLayout
@@ -140,13 +140,13 @@
 
             <EditText
                 android:id="@+id/et_storeAddress"
-                android:gravity="center"
-                android:text=""
+                android:layout_width="305dp"
+                android:layout_height="wrap_content"
                 android:focusable="false"
+                android:gravity="center"
                 android:inputType="textMultiLine"
                 android:minLines="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:text=""
                 android:textSize="8sp" />
         </LinearLayout>
         <LinearLayout
@@ -166,13 +166,13 @@
 
             <EditText
                 android:id="@+id/et_conductorID"
-                android:gravity="center"
-                android:text=""
+                android:layout_width="317dp"
+                android:layout_height="wrap_content"
                 android:focusable="false"
+                android:gravity="center"
                 android:inputType="textMultiLine"
                 android:minLines="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:text=""
                 android:textSize="8sp" />
         </LinearLayout>
         <LinearLayout
@@ -194,33 +194,37 @@
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
+
                 <EditText
                     android:id="@+id/et_GPSLongitude"
-                    android:gravity="center"
-                    android:text=""
+                    android:layout_width="100dp"
+                    android:layout_height="17dp"
                     android:focusable="false"
+                    android:gravity="center"
                     android:inputType="textMultiLine"
                     android:minLines="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:text=""
                     android:textSize="8sp" />
+
                 <EditText
                     android:id="@+id/et_GPSLatitude"
-                    android:gravity="center"
-                    android:text=""
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
                     android:focusable="false"
+                    android:gravity="center"
                     android:inputType="textMultiLine"
                     android:minLines="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:text=""
                     android:textSize="8sp" />
 
             </LinearLayout>
+
             <Button
-                android:layout_width="match_parent"
+                android:id="@+id/btn_gps"
+                android:layout_marginLeft="100dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="开始定位"
-                android:id="@+id/btn_gps"/>
+                android:text="开始定位" />
         </LinearLayout>
 
     </LinearLayout>
