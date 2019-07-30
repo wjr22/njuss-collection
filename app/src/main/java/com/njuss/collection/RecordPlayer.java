@@ -17,6 +17,7 @@ public class RecordPlayer {
         this.mcontext = context;
     }
 
+
     // 播放录音文件
     public void playRecordFile(File file) {
         if (file.exists() && file != null) {
