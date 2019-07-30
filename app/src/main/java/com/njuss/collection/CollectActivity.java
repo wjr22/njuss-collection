@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -58,17 +59,10 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
     private EditText etConductorID;
     private EditText etStoreAddress;
 
-    //界面控件
-    private ImageButton startRecord;
-    private ImageButton startPlay;
-    private ImageButton stopRecord;
-    private ImageButton stopPlay;
-
     private Button finish;
 
+    private TextView integrity;
     private static final String LOG_TAG = "AudioRecordTest";
-
-    private static String mediaName ;
 
     private Store store;
 
@@ -81,7 +75,6 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
     private MediaRecorder mRecorder = null;
 
     private CollectionService collectionService ;
-    private String FileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +107,8 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
 
         gps = (Button) findViewById(R.id.btn_gps);
 
+        integrity=(TextView)findViewById(R.id.integrity);
+        integrity.setText("完整度"+store.getComplete());
        if(store.getStoreAddress() != null)
             etStoreAddress.setText(store.getStoreAddress());
         if(store.getLicenseID() != null)
@@ -165,7 +160,7 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
         photoRBtn.setOnClickListener(this);
         photoIDBtn.setOnClickListener(this);
         photoMBtn.setOnClickListener(this);
-        photoLBtn.setOnClickListener(this);
+        photoRBtn.setOnClickListener(this);
         startOrStopRecord.setOnClickListener(this);
         startOrStopPlay.setOnClickListener(this);
         finish.setOnClickListener(this);
@@ -205,8 +200,6 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
     }
 
     public void uploadData(){
-        collectionService.setStore(store);
-        store.setComplete(collectionService.calcComplete());
         if(store.getComplete() >= 80){
             //完成度大于80%
             collectionService.update();
@@ -228,34 +221,30 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
                 if (result != null) {
                     photoIDBtn.setImageBitmap(result);
                     fileName = fileName + "Pic.jpg";
-                    store.setLicensePic(fileName);
                 }
             }
         } else if (requestCode == REQUEST_CODE_2) {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 result = data.getParcelableExtra("data");
                 if (result != null) {
-                    photoLBtn.setImageBitmap(result);
+                    photoIDBtn.setImageBitmap(result);
                     fileName = fileName + "PicL.jpg";
-                    store.setStorePicL(fileName);
                 }
             }
         } else if (requestCode == REQUEST_CODE_3) {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 result = data.getParcelableExtra("data");
                 if (result != null){
-                    photoMBtn.setImageBitmap(result);
+                    photoIDBtn.setImageBitmap(result);
                     fileName = fileName + "PicM.jpg";
-                    store.setStorePicM(fileName);
                 }
             }
         } else if (requestCode == REQUEST_CODE_4) {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 result = data.getParcelableExtra("data");
                 if (result != null){
-                    photoRBtn.setImageBitmap(result);
+                    photoIDBtn.setImageBitmap(result);
                     fileName = fileName + "PicR.jpg";
-                    store.setStorePicR(fileName);
                 }
             }
         }
@@ -265,18 +254,15 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
         }
         if(result != null){
             //本地暂存
-            Log.d("Camera Storage", "onActivityResult: ====");
             FileOutputStream fos = null;
             App app = (App) getApplication();
             File file = new File(app.generatePicDir(), fileName);
             try {
-                Log.d("OUTPUT PIC NAME", "onActivityResult: "+fileName);
                 fos = new FileOutputStream(file);
                 result.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } finally {
-                MediaStore.Images.Media.insertImage(getContentResolver(), result, "", "");
                 try {
                     fos.flush();
                     fos.close();
@@ -284,71 +270,9 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
                     e.printStackTrace();
                 }
             }
-        }
-    }
-
-    class startRecordListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View v) {
-            // TODO Auto-generated method stub
-
-            mRecorder = new MediaRecorder();
-            mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-            mRecorder.setOutputFile(FileName);
-            mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-            try {
-                mRecorder.prepare();
-            } catch (IOException e) {
-                Log.e(LOG_TAG, "prepare() failed");
-            }
-            mRecorder.start();
-            Toast.makeText(CollectActivity.this, "开始录制！",Toast.LENGTH_SHORT).show();
-        }
-
-    }
-    //停止录音
-    class stopRecordListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View v) {
-            // TODO Auto-generated method stub
-            mRecorder.stop();
-            mRecorder.release();
-            mRecorder = null;
-            Toast.makeText(CollectActivity.this, "停止录制！",Toast.LENGTH_SHORT).show();
-        }
-    }
-    //播放录音
-    class startPlayListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View v) {
-            // TODO Auto-generated method stub
-
-            mPlayer = new MediaPlayer();
-            try{
-                mPlayer.setDataSource(FileName);
-                mPlayer.prepare();
-                mPlayer.start();
-                Toast.makeText(CollectActivity.this, "开始播放！",Toast.LENGTH_SHORT).show();
-            }catch(IOException e){
-                Log.e(LOG_TAG,"播放失败");
-            }
-        }
-
-    }
-    //停止播放录音
-    class stopPlayListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View v) {
-            // TODO Auto-generated method stub
-            Toast.makeText(CollectActivity.this, "停止播放！",Toast.LENGTH_SHORT).show();
-            mPlayer.release();
-            mPlayer = null;
 
         }
     }
+
+
 }
