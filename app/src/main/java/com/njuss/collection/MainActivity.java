@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
                 String psd = edtUserPassword.getText().toString();
                 Log.d("get msg string is ...", name +"======");
                 UserService userService = new UserService(getApplicationContext());
-                if(userService.checkUserByMobile(name,psd)) {
+                if(userService.checkUserByMobile(name)) {
                     User.setFinished(userService.finished);
                     User.setUnfinished(userService.unfinished);
                     Log.d("SSS", User.getUnfinished().size() +"========");

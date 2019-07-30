@@ -54,6 +54,45 @@ public class UploadData {
         storeValues.put("storeName", "王家若的小店");
         long IDl = db.insert("tStores", null, storeValues);
         Log.d("DB Operate", "insert into tStores "+ IDl + " Success!========");
+
+        ContentValues contentValues2 = new ContentValues();      // 插入用户
+        contentValues.put("conductorMobile","13573318455");
+        contentValues.put("conductorName","朱晓悦");
+        contentValues.put("conductorPwd","13573318455");
+        long id2 = db.insert("tGridConductor",null,contentValues);
+        Log.d("DB Operate", "insert into tGridConductor "+id + " success!========");
+        ContentValues storeValues2 = new ContentValues();        //插入商户
+        storeValues.put("conductorID", id);
+        storeValues.put("licenseID", "111110000011172");
+        storeValues.put("storeName", "朱晓悦的小店");
+        long IDl2 = db.insert("tStores", null, storeValues);
+        Log.d("DB Operate", "insert into tStores "+ IDl + " Success!========");
+
+        ContentValues contentValues3 = new ContentValues();      // 插入用户
+        contentValues.put("conductorMobile","123456789");
+        contentValues.put("conductorName","魏朝阳");
+        contentValues.put("conductorPwd","123456789");
+        long id3 = db.insert("tGridConductor",null,contentValues);
+        Log.d("DB Operate", "insert into tGridConductor "+id + " success!========");
+        ContentValues storeValues3 = new ContentValues();        //插入商户
+        storeValues.put("conductorID", id);
+        storeValues.put("licenseID", "111110000011127");
+        storeValues.put("storeName", "魏朝阳的小店");
+        long IDl3 = db.insert("tStores", null, storeValues);
+        Log.d("DB Operate", "insert into tStores "+ IDl + " Success!========");
+
+        ContentValues contentValues4 = new ContentValues();      // 插入用户
+        contentValues.put("conductorMobile","987654321");
+        contentValues.put("conductorName","daisy");
+        contentValues.put("conductorPwd","123456789");
+        long id4 = db.insert("tGridConductor",null,contentValues);
+        Log.d("DB Operate", "insert into tGridConductor "+id + " success!========");
+        ContentValues storeValues4 = new ContentValues();        //插入商户
+        storeValues.put("conductorID", id);
+        storeValues.put("licenseID", "111110011011127");
+        storeValues.put("storeName", "daisy的小店");
+        long IDl4 = db.insert("tStores", null, storeValues);
+        Log.d("DB Operate", "insert into tStores "+ IDl + " Success!========");
     }
 
     /**
