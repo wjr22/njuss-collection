@@ -16,12 +16,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="150dp"
-        android:text="欢迎使用数据采集系统！"
+        android:text=""
         android:textSize="27sp"
 
         />
     <EditText
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="40dp"
         android:id="@+id/user_name"
         android:layout_width="match_parent"
         android:layout_height="45dp"

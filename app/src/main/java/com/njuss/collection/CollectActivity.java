@@ -143,7 +143,7 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
         gps = (Button) findViewById(R.id.btn_gps);
 
         integrity=(TextView)findViewById(R.id.integrity);
-        integrity.setText("完整度"+ String.valueOf(store.getComplete() == null ? 0: store.getComplete()));
+        integrity.setText("完整度"+ String.valueOf(store.getComplete() == null ? 0: store.getComplete())+"%");
        if(store.getStoreAddress() != null)
             etStoreAddress.setText(store.getStoreAddress());
         if(store.getLicenseID() != null) {

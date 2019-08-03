@@ -32,7 +32,8 @@
             android:value="9ea0f794331427a0576f6c137ec2a7ca" />
 
         <activity android:name=".ListViewActivityr" />
-        <activity android:name=".TabHostActivity" />
+        <activity android:name=".TabHostActivity"
+            android:theme="@style/Widget.AppCompat.ActionBar"/>
         <activity android:name=".LocationActivity" />
         <activity android:name=".CollectActivity" />
         <activity android:name=".PersonalCenterActivity" />

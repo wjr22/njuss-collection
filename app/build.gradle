@@ -3,11 +3,11 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         debug {
-            storeFile file('C:\\Users\\wangj\\AndroidStudioProjects\\keystore\\collection.jks')
-            storePassword 'collection'
-            keyAlias = 'APKkey'
-            keyPassword 'collection'
-            keyPassword 'collection'
+            //storeFile file('C:\\Users\\wangj\\AndroidStudioProjects\\keystore\\collection.jks')
+            //storePassword 'collection'
+            //keyAlias = 'APKkey'
+            //keyPassword 'collection'
+            //keyPassword 'collection'
         }
         release {
             storeFile file('C:\\Users\\wangj\\AndroidStudioProjects\\keystore\\collection.jks')
