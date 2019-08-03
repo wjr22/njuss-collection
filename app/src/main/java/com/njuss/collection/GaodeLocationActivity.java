@@ -19,8 +19,10 @@ import com.amap.api.location.AMapLocationQualityReport;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.CameraUpdateFactory;
+import com.amap.api.maps.model.MyLocationStyle;
 import com.njuss.collection.tools.Utils;
 
 import java.text.SimpleDateFormat;
@@ -109,7 +111,8 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
             // 显示地图
             aMap = mapView.getMap();
         }
-        aMap.getUiSettings().setZoomControlsEnabled(false);
+        MyLocationStyle myLocationStyle = new MyLocationStyle();
+        aMap.getUiSettings().setZoomControlsEnabled(true);
         // 设置地图默认的指南针是否显示
         aMap.getUiSettings().setCompassEnabled(true);
         // 设置定位监听
@@ -119,6 +122,7 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
         // 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
         aMap.setMyLocationEnabled(true);
         aMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
+        aMap.setMyLocationStyle(myLocationStyle.myLocationIcon((BitmapDescriptorFactory.fromResource(R.drawable.diaoyan_pos))));
     }
 
     /**
@@ -159,7 +163,7 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
         // 缓存机制默认开启，可以通过以下接口进行关闭。
         // 当开启定位缓存功能，在高精度模式和低功耗模式下进行的网络定位结果均会生成本地缓存，不区分单次定位还是连续定位。GPS定位结果不会被缓存。
         // 关闭缓存机制
-        mLocationOption.setLocationCacheEnable(false);
+        mLocationOption.setLocationCacheEnable(true);
         // 设置是否只定位一次，默认为false
         mLocationOption.setOnceLocation(true);
         // 给定位客户端对象设置定位参数
@@ -237,10 +241,10 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
                 address.append(aMapLocation.getStreet()); // 街道信息
                 address.append(aMapLocation.getStreetNum()); // 街道门牌号信息
                 address.append(aMapLocation.getCityCode()); // 城市编码
-                aMapLocation.getAdCode(); // 地区编码
-                aMapLocation.getAoiName(); // 获取当前定位点的AOI信息
-                aMapLocation.getBuildingId(); // 获取当前室内定位的建筑物Id
-                aMapLocation.getFloor(); // 获取当前室内定位的楼层
+                address.append(aMapLocation.getAdCode()); // 地区编码
+                address.append(aMapLocation.getAoiName()); // 获取当前定位点的AOI信息
+                address.append(aMapLocation.getBuildingId()); // 获取当前室内定位的建筑物Id
+                address.append(aMapLocation.getFloor()); // 获取当前室内定位的楼层
                 aMapLocation.getGpsAccuracyStatus(); // 获取GPS的当前状态
 
                 location = address.toString();

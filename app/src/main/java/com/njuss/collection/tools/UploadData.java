@@ -131,6 +131,8 @@ public class UploadData {
 
     }
 
+    public void readFromExcel(){ }
+
     public static class Builder{
 
         private Context context;

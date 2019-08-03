@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,7 +44,8 @@ import java.io.IOException;
  * @author wangj / weizhaoyang
  *
  */
-public class CollectActivity extends CheckPermissionsActivity implements  View.OnClickListener{
+public class CollectActivity extends CheckPermissionsActivity implements
+                                        View.OnClickListener , View.OnTouchListener {
     private static final int REQUEST_CODE_1 = 1;
     private static final int REQUEST_CODE_2 = 2;
     private static final int REQUEST_CODE_3 = 3;
@@ -401,6 +403,11 @@ public class CollectActivity extends CheckPermissionsActivity implements  View.O
         player.stopPalyer();
     }
 
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+
+        return false;
+    }
 }
 
 

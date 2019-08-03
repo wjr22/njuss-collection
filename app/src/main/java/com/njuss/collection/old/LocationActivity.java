@@ -1,4 +1,4 @@
-package com.njuss.collection;
+package com.njuss.collection.old;
 
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
