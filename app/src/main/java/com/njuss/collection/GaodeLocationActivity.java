@@ -1,14 +1,20 @@
 package com.njuss.collection;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
@@ -19,22 +25,37 @@ import com.amap.api.location.AMapLocationQualityReport;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.CameraUpdateFactory;
+import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MyLocationStyle;
+import com.amap.api.maps.model.MarkerOptions;
+import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.geocoder.GeocodeQuery;
+import com.amap.api.services.geocoder.GeocodeResult;
+import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.RegeocodeAddress;
+import com.amap.api.services.geocoder.RegeocodeQuery;
+import com.amap.api.services.geocoder.RegeocodeResult;
 import com.njuss.collection.tools.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.amap.api.col.n3.id.a;
 
-public class GaodeLocationActivity extends AppCompatActivity implements LocationSource, AMapLocationListener {
+public class GaodeLocationActivity extends AppCompatActivity implements LocationSource,
+        AMap.OnMapLongClickListener,AMap.OnMarkerDragListener,AMap.OnMapClickListener,AMapLocationListener, AMap.OnMarkerClickListener {
 
     private MapView mapView;
 
     private AMap aMap;
+
+    private UiSettings uiSettings;
 
     public static AMapLocationClient mLocationClient = null;
     public static AMapLocationClientOption mLocationOption = null;
@@ -50,6 +71,17 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
     private String GPSLongitude = "";
     boolean control = false;
 
+    private TextView tv_location;
+    private TextView tv_longtitude;
+    private TextView tv_latitude;
+    private TextView tv_percision;
+
+    private Boolean manual = false; // 手动档
+    private Boolean timeover = false; // 5秒后未成功强制手动
+    private int i = 0;
+    private int t=0;
+    private Double accuracy = 1000.0; //精度
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -61,6 +93,15 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gaode_location);
+        tv_latitude = (TextView) findViewById(R.id.txt_latitude);
+        tv_location = (TextView) findViewById(R.id.txt_location);
+        tv_longtitude = (TextView) findViewById(R.id.txt_longitude);
+        tv_percision = (TextView) findViewById(R.id.txt_GPS_percision);
+        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        if(!wifiManager.isWifiEnabled()) {
+            Toast.makeText(GaodeLocationActivity.this, "请打开WIFI进行定位！",Toast.LENGTH_LONG).show();
+            startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS)); //直接进入手机中的wifi网络设置界面
+        }
         initView();
         // 创建地图
         mapView.onCreate(savedInstanceState);
@@ -92,7 +133,10 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
         // 销毁地图
         mapView.onDestroy();
     }
-
+    @Override
+    public void onBackPressed() {
+        onDestroy();
+    }
     /**
      * 重写此方法，在activity执行onSaveInstanceState时执行mMapView.onSaveInstanceState (outState)，保存地图当前的状态
      *
@@ -105,8 +149,9 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
     }
 
     private void initView() {
+
         // 实例化地图控件
-        mapView = (MapView) findViewById(R.id.id_gaode_location_map);
+        mapView = (MapView) findViewById(R.id.gaode_location_map);
         if (aMap == null) {
             // 显示地图
             aMap = mapView.getMap();
@@ -123,53 +168,41 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
         aMap.setMyLocationEnabled(true);
         aMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
         aMap.setMyLocationStyle(myLocationStyle.myLocationIcon((BitmapDescriptorFactory.fromResource(R.drawable.diaoyan_pos))));
+        uiSettings = aMap.getUiSettings();
+        uiSettings.setZoomControlsEnabled(true);
+        uiSettings.setZoomGesturesEnabled(true);
+        uiSettings.setCompassEnabled(true);
+        uiSettings.setMyLocationButtonEnabled(true);
+        uiSettings.setScrollGesturesEnabled(true);
+        aMap.setLocationSource(this);
+        aMap.setOnMapClickListener(this);
+        aMap.setOnMarkerDragListener(this);
+        aMap.setOnMarkerClickListener(this);
+
     }
 
     /**
      * 初始化高德地图
      */
     public void initGaoDeMap() {
-        // 初始化定位
         mLocationClient = new AMapLocationClient(getApplicationContext());
-        // 设置高德地图定位回调监听
         mLocationClient.setLocationListener(this);
-        // 初始化AMapLocationClientOption对象
         mLocationOption = new AMapLocationClientOption();
-        // 高精度定位模式：会同时使用网络定位和GPS定位，优先返回最高精度的定位结果，以及对应的地址描述信息
-        // 设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-        // 低功耗定位模式：不会使用GPS和其他传感器，只会使用网络定位（Wi-Fi和基站定位）；
-        //设置定位模式为AMapLocationMode.Battery_Saving，低功耗模式。
-//        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Battery_Saving);
-        // 仅用设备定位模式：不需要连接网络，只使用GPS进行定位，这种模式下不支持室内环境的定位，自 v2.9.0 版本支持返回地址描述信息。
-        // 设置定位模式为AMapLocationMode.Device_Sensors，仅设备模式。
-//        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Device_Sensors);
-        // SDK默认采用连续定位模式，时间间隔2000ms
-        // 设置定位间隔，单位毫秒，默认为2000ms，最低1000ms。
-        mLocationOption.setInterval(3000);
-        // 设置定位同时是否需要返回地址描述
-        //设置是否返回地址信息（默认返回地址信息）
+        mLocationOption.setInterval(1000);
         mLocationOption.setNeedAddress(true);
-        // 设置是否强制刷新WIFI，默认为强制刷新。每次定位主动刷新WIFI模块会提升WIFI定位精度，但相应的会多付出一些电量消耗。
-        // 设置是否强制刷新WIFI，默认为true，强制刷新。
         mLocationOption.setWifiActiveScan(true);
-        // 设置是否允许模拟软件Mock位置结果，多为模拟GPS定位结果，默认为false，不允许模拟位置。
-        // 设置是否允许模拟位置,默认为false，不允许模拟位置
         mLocationOption.setMockEnable(false);
-        // 设置定位请求超时时间，默认为30秒
-        // 单位是毫秒，默认30000毫秒，建议超时时间不要低于8000毫秒。
         mLocationOption.setHttpTimeOut(50000);
-        // 设置是否开启定位缓存机制
-        // 缓存机制默认开启，可以通过以下接口进行关闭。
-        // 当开启定位缓存功能，在高精度模式和低功耗模式下进行的网络定位结果均会生成本地缓存，不区分单次定位还是连续定位。GPS定位结果不会被缓存。
-        // 关闭缓存机制
         mLocationOption.setLocationCacheEnable(true);
         // 设置是否只定位一次，默认为false
-        mLocationOption.setOnceLocation(true);
+        //mLocationOption.setOnceLocation(true);
+        //mLocationOption.setOnceLocationLatest(true);
         // 给定位客户端对象设置定位参数
         mLocationClient.setLocationOption(mLocationOption);
         // 启动高德地图定位
         mLocationClient.startLocation();
+
     }
 
     @TargetApi(Build.VERSION_CODES.N)
@@ -177,19 +210,18 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
     public void onLocationChanged(AMapLocation aMapLocation) {
         // 解析AMapLocation对象
         // 判断AMapLocation对象不为空，当定位错误码类型为0时定位成功
+        StringBuffer sb = new StringBuffer();
         if (aMapLocation != null) {
             if (aMapLocation.getErrorCode() == 0) {
+                t++;
+                if(aMapLocation.getAccuracy() <= 30 && t<= 10) {
 
-                StringBuffer sb = new StringBuffer();
-                //errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
-                if(aMapLocation.getErrorCode() == 0){
                     sb.append("定位成功" + "\n");
                     sb.append("定位类型: " + aMapLocation.getLocationType() + "\n");
                     sb.append("经    度    : " + aMapLocation.getLongitude() + "\n");
                     sb.append("纬    度    : " + aMapLocation.getLatitude() + "\n");
                     sb.append("精    度    : " + aMapLocation.getAccuracy() + "米" + "\n");
                     sb.append("提供者    : " + aMapLocation.getProvider() + "\n");
-
                     sb.append("速    度    : " + aMapLocation.getSpeed() + "米/秒" + "\n");
                     sb.append("角    度    : " + aMapLocation.getBearing() + "\n");
                     // 获取当前提供定位服务的卫星个数
@@ -204,54 +236,54 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
                     sb.append("兴趣点    : " + aMapLocation.getPoiName() + "\n");
                     //定位完成的时间
                     sb.append("定位时间: " + Utils.formatUTC(aMapLocation.getTime(), "yyyy-MM-dd HH:mm:ss") + "\n");
+                    sb.append("***定位质量报告***").append("\n");
+                    sb.append("* WIFI开关：").append(aMapLocation.getLocationQualityReport().isWifiAble() ? "开启" : "关闭").append("\n");
+                    sb.append("* GPS状态：").append(getGPSStatusString(aMapLocation.getLocationQualityReport().getGPSStatus())).append("\n");
+                    sb.append("* GPS星数：").append(aMapLocation.getLocationQualityReport().getGPSSatellites()).append("\n");
+                    sb.append("* 网络类型：" + aMapLocation.getLocationQualityReport().getNetworkType()).append("\n");
+                    sb.append("* 网络耗时：" + aMapLocation.getLocationQualityReport().getNetUseTime()).append("\n");
+                    sb.append("****************").append("\n");
+                    //定位之后的回调时间
+                    sb.append("回调时间: " + Utils.formatUTC(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss") + "\n");
+
+                    //解析定位结果，
+                    String result = sb.toString();
+                    Log.d("info---", result);
+                    StringBuffer address = new StringBuffer();
+                    aMapLocation.getLocationType(); // 获取当前定位结果来源，如网络定位结果，详见定位类型表
+                    GPSLatitude = String.valueOf(aMapLocation.getLatitude()); // 获取纬度
+                    GPSLongitude = String.valueOf(aMapLocation.getLongitude()); // 获取经度
+                    aMapLocation.getAccuracy(); // 获取精度信息
+                    aMapLocation.getAddress(); // 地址，如果option中设置isNeedAddress为false，则没有此结果，网络定位结果中会有地址信息，GPS定位不返回地址信息。
+                    address.append(aMapLocation.getCountry()); // 国家信息
+                    address.append(aMapLocation.getProvince()); // 省信息
+                    address.append(aMapLocation.getCity()); // 城市信息
+                    address.append(aMapLocation.getDistrict()); // 城区信息
+                    address.append(aMapLocation.getStreet()); // 街道信息
+                    address.append(aMapLocation.getStreetNum()); // 街道门牌号信息
+                    address.append(aMapLocation.getCityCode()); // 城市编码
+                    address.append(aMapLocation.getAdCode()); // 地区编码
+                    address.append(aMapLocation.getAoiName()); // 获取当前定位点的AOI信息
+                    address.append(aMapLocation.getBuildingId()); // 获取当前室内定位的建筑物Id
+                    address.append(aMapLocation.getFloor()); // 获取当前室内定位的楼层
+                    aMapLocation.getGpsAccuracyStatus(); // 获取GPS的当前状态
+                    location = address.toString();
+                    if (!control) {
+                        Toast.makeText(GaodeLocationActivity.this, "定位完成", Toast.LENGTH_SHORT).show();
+                        tv_percision.append(String.valueOf(aMapLocation.getAccuracy()));
+                        tv_longtitude.append(GPSLongitude);
+                        tv_latitude.append(GPSLatitude);
+                        tv_location.append(address.toString());
+                        control = true;
+                    }
                 } else {
-                    //定位失败
-                    sb.append("定位失败" + "\n");
-                    sb.append("错误码:" + aMapLocation.getErrorCode() + "\n");
-                    sb.append("错误信息:" + aMapLocation.getErrorInfo() + "\n");
-                    sb.append("错误描述:" + aMapLocation.getLocationDetail() + "\n");
+                    if(t>10 && !control) {
+                        // 设置手动档
+                        Toast.makeText(GaodeLocationActivity.this, "定位精度不够，请手动选择点！", Toast.LENGTH_LONG).show();
+                        manual = true;
+                        control = true;
+                    }
                 }
-                sb.append("***定位质量报告***").append("\n");
-                sb.append("* WIFI开关：").append(aMapLocation.getLocationQualityReport().isWifiAble() ? "开启":"关闭").append("\n");
-                sb.append("* GPS状态：").append(getGPSStatusString(aMapLocation.getLocationQualityReport().getGPSStatus())).append("\n");
-                sb.append("* GPS星数：").append(aMapLocation.getLocationQualityReport().getGPSSatellites()).append("\n");
-                sb.append("* 网络类型：" + aMapLocation.getLocationQualityReport().getNetworkType()).append("\n");
-                sb.append("* 网络耗时：" + aMapLocation.getLocationQualityReport().getNetUseTime()).append("\n");
-                sb.append("****************").append("\n");
-                //定位之后的回调时间
-                sb.append("回调时间: " + Utils.formatUTC(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss") + "\n");
-
-                //解析定位结果，
-                String result = sb.toString();
-                Log.d("info---", result);
-                if(!control) {
-                    Toast.makeText(GaodeLocationActivity.this, "定位完成", Toast.LENGTH_SHORT).show();
-                    control = true;
-                }
-                StringBuffer address = new StringBuffer();
-                aMapLocation.getLocationType(); // 获取当前定位结果来源，如网络定位结果，详见定位类型表
-                GPSLatitude = String.valueOf(aMapLocation.getLatitude()); // 获取纬度
-                GPSLongitude = String.valueOf(aMapLocation.getLongitude()); // 获取经度
-                aMapLocation.getAccuracy(); // 获取精度信息
-                aMapLocation.getAddress(); // 地址，如果option中设置isNeedAddress为false，则没有此结果，网络定位结果中会有地址信息，GPS定位不返回地址信息。
-                address.append(aMapLocation.getCountry()); // 国家信息
-                address.append(aMapLocation.getProvince()); // 省信息
-                address.append(aMapLocation.getCity()); // 城市信息
-                address.append(aMapLocation.getDistrict()); // 城区信息
-                address.append(aMapLocation.getStreet()); // 街道信息
-                address.append(aMapLocation.getStreetNum()); // 街道门牌号信息
-                address.append(aMapLocation.getCityCode()); // 城市编码
-                address.append(aMapLocation.getAdCode()); // 地区编码
-                address.append(aMapLocation.getAoiName()); // 获取当前定位点的AOI信息
-                address.append(aMapLocation.getBuildingId()); // 获取当前室内定位的建筑物Id
-                address.append(aMapLocation.getFloor()); // 获取当前室内定位的楼层
-                aMapLocation.getGpsAccuracyStatus(); // 获取GPS的当前状态
-
-                location = address.toString();
-                // 获取定位时间
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date date = new Date(aMapLocation.getTime());
-                df.format(date);
                 // 如果不设置标志位，拖动地图时，它会不断将地图移动到当前的位置
                 if (isFirstLocation) {
                     // 设置缩放级别
@@ -262,9 +294,13 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
                     mListener.onLocationChanged(aMapLocation);
                     isFirstLocation = false;
                 }
-
             } else {
-                // 定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
+            //定位失败
+                sb.append("定位失败" + "\n");
+                sb.append("错误码:" + aMapLocation.getErrorCode() + "\n");
+                sb.append("错误信息:" + aMapLocation.getErrorInfo() + "\n");
+                sb.append("错误描述:" + aMapLocation.getLocationDetail() + "\n");
+            // 定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
                 Log.e("HLQ_Struggle", "location Error, ErrCode:"
                         + aMapLocation.getErrorCode() + ", errInfo:"
                         + aMapLocation.getErrorInfo());
@@ -307,5 +343,103 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
                 break;
         }
         return str;
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        // 地图点击
+        Log.d("======", "LatLng:==="+latLng.toString());
+        // default set disable, if accuracy >= 30m, Users must set position through this functions.
+        i++;
+        if(manual && i == 1) {
+            MarkerOptions markerOption = new MarkerOptions();
+            markerOption.position(latLng);
+            markerOption.title("选择点").snippet("");
+
+            markerOption.draggable(true);//设置Marker可拖动
+            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                    .decodeResource(getResources(), R.drawable.nowpos)));
+            // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+            markerOption.setFlat(true);//设置marker平贴地图效果
+            final Marker marker = aMap.addMarker(markerOption);
+            marker.setClickable(true);
+            location = getLocation(latLng);
+            GPSLongitude = String.valueOf(latLng.longitude);
+            GPSLatitude = String.valueOf(latLng.latitude);
+            tv_percision.setText("无");
+            tv_longtitude.setText("经度："+GPSLatitude);
+            tv_latitude.setText("纬度："+GPSLongitude);
+            tv_location.setText("位置："+location);
+        }
+    }
+
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+        // 拖拽结束
+        LatLng ll = marker.getPosition();
+        location = getLocation(ll);
+        Log.d("======", "marker drag end[==");
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        // 点击标记
+        new AlertDialog.Builder(this).setTitle("手动选点")
+                .setMessage("是否选择该点？\n 地址：")
+                .setPositiveButton("ok",null)
+                .setNegativeButton("cancel",null).show();
+        return false;
+    }
+
+    public String getLocation(LatLng ll){
+        final String[] res = new String[1];
+        GeocodeSearch geocoderSearch = new GeocodeSearch(this);
+// 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
+        LatLonPoint llp = new LatLonPoint(ll.latitude,ll.longitude);
+        RegeocodeQuery query = new RegeocodeQuery(llp, 30,GeocodeSearch.AMAP);
+        geocoderSearch.getFromLocationAsyn(query);
+        geocoderSearch.setOnGeocodeSearchListener(new GeocodeSearch.OnGeocodeSearchListener() {
+            @Override
+            public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int i) {
+                // 经纬度转地址
+                StringBuffer address = new StringBuffer();
+                RegeocodeAddress aMapLocation = regeocodeResult.getRegeocodeAddress();
+                address.append(aMapLocation.getCountry()); // 国家信息
+                address.append(aMapLocation.getProvince()); // 省信息
+                address.append(aMapLocation.getCity()); // 城市信息
+                address.append(aMapLocation.getDistrict()); // 城区信息
+               // address.append(aMapLocation.getStreet()); // 街道信息
+               // address.append(aMapLocation.getStreetNum()); // 街道门牌号信息
+                address.append(aMapLocation.getCityCode()); // 城市编码
+                address.append(aMapLocation.getAdCode()); // 地区编码
+               // address.append(aMapLocation.getAoiName()); // 获取当前定位点的AOI信息
+               // address.append(aMapLocation.getBuildingId()); // 获取当前室内定位的建筑物Id
+               // address.append(aMapLocation.getFloor()); // 获取当前室内定位的楼层
+                res[0] = address.toString();
+                Log.d("======", res[0]);
+            }
+
+            @Override
+            public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
+                // 地址转高德经纬度
+
+            }
+        });
+        return res[0];
+    }
+
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+
     }
 }

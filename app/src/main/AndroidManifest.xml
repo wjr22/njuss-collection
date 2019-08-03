@@ -33,7 +33,7 @@
 
         <activity android:name=".ListViewActivityr" />
         <activity android:name=".TabHostActivity" />
-        <activity android:name=".old.LocationActivity" />
+        <activity android:name=".LocationActivity" />
         <activity android:name=".CollectActivity" />
         <activity android:name=".PersonalCenterActivity" />
         <activity android:name=".old.fanzai_AMapCollectActivity" />

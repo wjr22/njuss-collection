@@ -93,6 +93,18 @@ public class UploadData {
         storeValues.put("storeName", "daisy的小店");
         long IDl4 = db.insert("tStores", null, storeValues);
         Log.d("DB Operate", "insert into tStores "+ IDl + " Success!========");
+        ContentValues storeValues5 = new ContentValues();        //插入商户
+        storeValues.put("conductorID", id);
+        storeValues.put("licenseID", "111110011041127");
+        storeValues.put("storeName", "daisy的小店");
+        long IDl5 = db.insert("tStores", null, storeValues);
+        Log.d("DB Operate", "insert into tStores "+ IDl + " Success!========");
+        ContentValues storeValues6 = new ContentValues();        //插入商户
+        storeValues.put("conductorID", id);
+        storeValues.put("licenseID", "111110011061127");
+        storeValues.put("storeName", "daisy的小店");
+        long IDl6 = db.insert("tStores", null, storeValues);
+        Log.d("DB Operate", "insert into tStores "+ IDl + " Success!========");
     }
 
     /**
