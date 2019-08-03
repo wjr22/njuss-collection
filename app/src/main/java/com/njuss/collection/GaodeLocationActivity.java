@@ -194,7 +194,7 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
         mLocationOption.setWifiActiveScan(true);
         mLocationOption.setMockEnable(false);
         mLocationOption.setHttpTimeOut(50000);
-        mLocationOption.setLocationCacheEnable(true);
+        mLocationOption.setLocationCacheEnable(false);
         // 设置是否只定位一次，默认为false
         //mLocationOption.setOnceLocation(true);
         //mLocationOption.setOnceLocationLatest(true);
@@ -214,7 +214,8 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
         if (aMapLocation != null) {
             if (aMapLocation.getErrorCode() == 0) {
                 t++;
-                if(aMapLocation.getAccuracy() <= 30 && t<= 10) {
+                double accuracy = aMapLocation.getAccuracy();
+                if(accuracy <= 30 && t == 10) {
 
                     sb.append("定位成功" + "\n");
                     sb.append("定位类型: " + aMapLocation.getLocationType() + "\n");
@@ -227,8 +228,8 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
                     // 获取当前提供定位服务的卫星个数
                     sb.append("星    数    : " + aMapLocation.getSatellites() + "\n");
                     sb.append("国    家    : " + aMapLocation.getCountry() + "\n");
-                    sb.append("省            : " + aMapLocation.getProvince() + "\n");
-                    sb.append("市            : " + aMapLocation.getCity() + "\n");
+                    sb.append("省          : " + aMapLocation.getProvince() + "\n");
+                    sb.append("市          : " + aMapLocation.getCity() + "\n");
                     sb.append("城市编码 : " + aMapLocation.getCityCode() + "\n");
                     sb.append("区            : " + aMapLocation.getDistrict() + "\n");
                     sb.append("区域 码   : " + aMapLocation.getAdCode() + "\n");
@@ -253,7 +254,7 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
                     aMapLocation.getLocationType(); // 获取当前定位结果来源，如网络定位结果，详见定位类型表
                     GPSLatitude = String.valueOf(aMapLocation.getLatitude()); // 获取纬度
                     GPSLongitude = String.valueOf(aMapLocation.getLongitude()); // 获取经度
-                    aMapLocation.getAccuracy(); // 获取精度信息
+                    //aMapLocation.getAccuracy(); // 获取精度信息
                     aMapLocation.getAddress(); // 地址，如果option中设置isNeedAddress为false，则没有此结果，网络定位结果中会有地址信息，GPS定位不返回地址信息。
                     address.append(aMapLocation.getCountry()); // 国家信息
                     address.append(aMapLocation.getProvince()); // 省信息
@@ -267,13 +268,13 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
                     address.append(aMapLocation.getBuildingId()); // 获取当前室内定位的建筑物Id
                     address.append(aMapLocation.getFloor()); // 获取当前室内定位的楼层
                     aMapLocation.getGpsAccuracyStatus(); // 获取GPS的当前状态
-                    location = address.toString();
+                    location = aMapLocation.getAddress()+aMapLocation.getPoiName();
                     if (!control) {
                         Toast.makeText(GaodeLocationActivity.this, "定位完成", Toast.LENGTH_SHORT).show();
-                        tv_percision.append(String.valueOf(aMapLocation.getAccuracy()));
+                        tv_percision.append(String.valueOf(accuracy));
                         tv_longtitude.append(GPSLongitude);
                         tv_latitude.append(GPSLatitude);
-                        tv_location.append(address.toString());
+                        tv_location.append(location);
                         control = true;
                     }
                 } else {
@@ -295,16 +296,19 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
                     isFirstLocation = false;
                 }
             } else {
-            //定位失败
-                sb.append("定位失败" + "\n");
-                sb.append("错误码:" + aMapLocation.getErrorCode() + "\n");
-                sb.append("错误信息:" + aMapLocation.getErrorInfo() + "\n");
-                sb.append("错误描述:" + aMapLocation.getLocationDetail() + "\n");
-            // 定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
-                Log.e("HLQ_Struggle", "location Error, ErrCode:"
-                        + aMapLocation.getErrorCode() + ", errInfo:"
-                        + aMapLocation.getErrorInfo());
-                Toast.makeText(GaodeLocationActivity.this, "定位失败！请检查并打开相关权限！", Toast.LENGTH_LONG).show();
+                //定位失败
+                if (!timeover) {
+                    sb.append("定位失败" + "\n");
+                    sb.append("错误码:" + aMapLocation.getErrorCode() + "\n");
+                    sb.append("错误信息:" + aMapLocation.getErrorInfo() + "\n");
+                    sb.append("错误描述:" + aMapLocation.getLocationDetail() + "\n");
+                    // 定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
+                    Log.e("HLQ_Struggle", "location Error, ErrCode:"
+                            + aMapLocation.getErrorCode() + ", errInfo:"
+                            + aMapLocation.getErrorInfo());
+                    Toast.makeText(GaodeLocationActivity.this, "定位失败！请检查并打开相关权限！", Toast.LENGTH_LONG).show();
+                    timeover = true;
+                }
             }
         }
     }
@@ -406,7 +410,7 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
         GeocodeSearch geocoderSearch = new GeocodeSearch(this);
 // 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
         LatLonPoint llp = new LatLonPoint(ll.latitude,ll.longitude);
-        RegeocodeQuery query = new RegeocodeQuery(llp, 30,GeocodeSearch.AMAP);
+        RegeocodeQuery query = new RegeocodeQuery(llp, 30,GeocodeSearch.GPS);
         geocoderSearch.getFromLocationAsyn(query);
         geocoderSearch.setOnGeocodeSearchListener(new GeocodeSearch.OnGeocodeSearchListener() {
             @Override
