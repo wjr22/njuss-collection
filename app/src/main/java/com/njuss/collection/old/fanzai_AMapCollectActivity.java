@@ -1,13 +1,10 @@
-package com.njuss.collection;
+package com.njuss.collection.old;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,16 +36,14 @@ import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.GeocodeSearch.OnGeocodeSearchListener;
 import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.amap.api.services.geocoder.RegeocodeResult;
+import com.njuss.collection.R;
 import com.njuss.collection.base.CheckPermissionsActivity;
 import com.njuss.collection.base.Global;
-import com.njuss.collection.service.GPSDataService;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Logger;
 
 public class fanzai_AMapCollectActivity extends CheckPermissionsActivity implements OnClickListener, OnCameraChangeListener, OnGeocodeSearchListener, OnMyLocationChangeListener
 {

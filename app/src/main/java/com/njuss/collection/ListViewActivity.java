@@ -79,7 +79,6 @@ public class ListViewActivity extends AppCompatActivity {
         public class ViewHolder{
 
             TextView tv_listviewitme_storename;
-            TextView tv_listviewitme_address;
             TextView tv_listviewitme_licenseID;
             TextView tv_listviewitme_locate;
 
@@ -112,12 +111,9 @@ public class ListViewActivity extends AppCompatActivity {
             if (v == null){
                 v = inflater.inflate(R.layout.layout_list_item,null);
                 ViewHolder vh = new ViewHolder();
-
                 vh.tv_listviewitme_storename = v.findViewById(R.id.tv_listviewitme_storename);
-                vh.tv_listviewitme_address = v.findViewById(R.id.tv_listviewitme_address);
                 vh.tv_listviewitme_licenseID = v.findViewById(R.id.tv_listviewitme_licenseID);
-                vh.tv_listviewitme_locate = v.findViewById(R.id.tv_listviewitme_locate);
-
+                vh.tv_listviewitme_locate = v.findViewById(R.id.tv_listviewitme_address);
                 v.setTag(vh);
             }
 
@@ -125,8 +121,6 @@ public class ListViewActivity extends AppCompatActivity {
             final Store store = data.get(i);
 
             vh.tv_listviewitme_storename.setText(store.getStoreName());
-            vh.tv_listviewitme_address.setText(store.getStoreAddress());
-
             vh.tv_listviewitme_licenseID.setText(store.getLicenseID());
             vh.tv_listviewitme_locate.setText(store.getStoreAddress());
 

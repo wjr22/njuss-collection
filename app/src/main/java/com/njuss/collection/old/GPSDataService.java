@@ -1,4 +1,4 @@
-package com.njuss.collection.service;
+package com.njuss.collection.old;
 
 import android.Manifest;
 import android.app.Service;
@@ -13,7 +13,6 @@ import android.location.GpsStatus.NmeaListener;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.OnNmeaMessageListener;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;

@@ -37,7 +37,7 @@
         <activity android:name=".LocationActivity" />
         <activity android:name=".CollectActivity" />
         <activity android:name=".PersonalCenterActivity" />
-        <activity android:name=".fanzai_AMapCollectActivity" />
+        <activity android:name=".old.fanzai_AMapCollectActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,7 +48,7 @@
 
         <service android:name="com.amap.api.location.APSService" />
         <service
-            android:name=".service.GPSDataService"
+            android:name=".old.GPSDataService"
             android:enabled="true" />
 
         <activity android:name=".ListViewActivity" />
