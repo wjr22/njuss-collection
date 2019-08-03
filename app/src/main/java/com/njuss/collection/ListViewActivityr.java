@@ -68,8 +68,6 @@ public class ListViewActivityr extends AppCompatActivity {
             TextView tv_listviewitme_storename;
             TextView tv_listviewitme_address;
             TextView tv_listviewitme_licenseID;
-            TextView tv_listviewitme_locate;
-
         }
 
         private LayoutInflater inflater;
@@ -103,7 +101,6 @@ public class ListViewActivityr extends AppCompatActivity {
                 vh.tv_listviewitme_storename = v.findViewById(R.id.tv_listviewitme_storename);
                 vh.tv_listviewitme_address = v.findViewById(R.id.tv_listviewitme_address);
                 vh.tv_listviewitme_licenseID = v.findViewById(R.id.tv_listviewitme_licenseID);
-                vh.tv_listviewitme_locate = v.findViewById(R.id.tv_listviewitme_locate);
 
                 v.setTag(vh);
             }
@@ -116,7 +113,6 @@ public class ListViewActivityr extends AppCompatActivity {
             vh.tv_listviewitme_address.setText(store.getStoreAddress());
 
             vh.tv_listviewitme_licenseID.setText(store.getLicenseID());
-            vh.tv_listviewitme_locate.setText(store.getStoreAddress());
 
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
