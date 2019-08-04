@@ -34,7 +34,10 @@ public class ListViewActivityr extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tab2);
         lv = findViewById(R.id.list_view2);
-
+// 更新数据
+        UserService userService = new UserService(getApplicationContext());
+        userService.setMap();
+        User.setFinished(userService.finished);
         //1.数据准备
         data = User.getFinishedList();
         //2.创建自定义适配器

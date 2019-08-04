@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.wifi.WifiManager;
@@ -215,13 +216,13 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
             if (aMapLocation.getErrorCode() == 0) {
                 t++;
                 double accuracy = aMapLocation.getAccuracy();
-                if(accuracy <= 30 && t == 10) {
+                if(accuracy <= 30 && t <= 8) {
 
                     sb.append("定位成功" + "\n");
                     sb.append("定位类型: " + aMapLocation.getLocationType() + "\n");
                     sb.append("经    度    : " + aMapLocation.getLongitude() + "\n");
                     sb.append("纬    度    : " + aMapLocation.getLatitude() + "\n");
-                    sb.append("精    度    : " + aMapLocation.getAccuracy() + "米" + "\n");
+                    sb.append("精    度    : " + accuracy + "米" + "\n");
                     sb.append("提供者    : " + aMapLocation.getProvider() + "\n");
                     sb.append("速    度    : " + aMapLocation.getSpeed() + "米/秒" + "\n");
                     sb.append("角    度    : " + aMapLocation.getBearing() + "\n");
@@ -269,16 +270,13 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
                     address.append(aMapLocation.getFloor()); // 获取当前室内定位的楼层
                     aMapLocation.getGpsAccuracyStatus(); // 获取GPS的当前状态
                     location = aMapLocation.getAddress()+aMapLocation.getPoiName();
-                    if (!control) {
-                        Toast.makeText(GaodeLocationActivity.this, "定位完成", Toast.LENGTH_SHORT).show();
-                        tv_percision.append(String.valueOf(accuracy));
-                        tv_longtitude.append(GPSLongitude);
-                        tv_latitude.append(GPSLatitude);
-                        tv_location.append(location);
+                    if (!control && t == 8) {
+                        Toast.makeText(GaodeLocationActivity.this, "定位完成", Toast.LENGTH_LONG).show();
+                        updateView(GPSLatitude, GPSLongitude, location, String.valueOf(accuracy));
                         control = true;
                     }
                 } else {
-                    if(t>10 && !control) {
+                    if(t>8 && !control) {
                         // 设置手动档
                         Toast.makeText(GaodeLocationActivity.this, "定位精度不够，请手动选择点！", Toast.LENGTH_LONG).show();
                         manual = true;
@@ -370,10 +368,7 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
             location = getLocation(latLng);
             GPSLongitude = String.valueOf(latLng.longitude);
             GPSLatitude = String.valueOf(latLng.latitude);
-            tv_percision.setText("无");
-            tv_longtitude.setText("经度："+GPSLatitude);
-            tv_latitude.setText("纬度："+GPSLongitude);
-            tv_location.setText("位置："+location);
+            updateView(GPSLatitude, GPSLongitude, location, "无");
         }
     }
 
@@ -391,7 +386,7 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
     public void onMarkerDragEnd(Marker marker) {
         // 拖拽结束
         LatLng ll = marker.getPosition();
-        location = getLocation(ll);
+        getLocation(ll);
         Log.d("======", "marker drag end[==");
     }
 
@@ -400,12 +395,17 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
         // 点击标记
         new AlertDialog.Builder(this).setTitle("手动选点")
                 .setMessage("是否选择该点？\n 地址：")
-                .setPositiveButton("ok",null)
+                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
                 .setNegativeButton("cancel",null).show();
         return false;
     }
 
-    public String getLocation(LatLng ll){
+    public String getLocation(final LatLng ll){
         final String[] res = new String[1];
         GeocodeSearch geocoderSearch = new GeocodeSearch(this);
 // 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
@@ -429,8 +429,9 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
                // address.append(aMapLocation.getAoiName()); // 获取当前定位点的AOI信息
                // address.append(aMapLocation.getBuildingId()); // 获取当前室内定位的建筑物Id
                // address.append(aMapLocation.getFloor()); // 获取当前室内定位的楼层
-                res[0] = address.toString();
+                res[0] = aMapLocation.getFormatAddress();
                 Log.d("======", res[0]);
+                updateView(String.valueOf(ll.latitude), String.valueOf(ll.longitude), res[0], "无");
             }
 
             @Override
@@ -445,5 +446,15 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
     @Override
     public void onMapLongClick(LatLng latLng) {
 
+    }
+
+    public void updateView(String GPSLatitude,String  GPSLongitude, String location, String percision){
+        tv_percision.setText("精度："+percision);
+        tv_longtitude.setText("经度："+GPSLatitude);
+        tv_latitude.setText("纬度："+GPSLongitude);
+        tv_location.setText("位置："+location);
+        this.location = location;
+        this.GPSLongitude = GPSLongitude;
+        this.GPSLatitude = GPSLatitude;
     }
 }
