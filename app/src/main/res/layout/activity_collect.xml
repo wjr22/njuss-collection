@@ -14,15 +14,16 @@
         android:paddingBottom="5dp"
         android:paddingLeft="10dp"
         android:orientation="vertical"
-        android:background="@color/colorBlueDark"
+        android:background="#108ee9"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/conductor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="XXX烟草销售点信息采集"
             android:textColor="#ffffff"
-            android:textSize="30sp" />
+            android:textSize="22sp" />
         <TextView
             android:id="@+id/integrity"
             android:layout_width="match_parent"
@@ -42,9 +43,10 @@
             android:layout_marginLeft="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="信息"
+            android:text="销售点信息"
+            android:gravity="center"
             android:textColor="@color/colorBlack"
-            android:textSize="20sp"/>
+            android:textSize="18sp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -104,12 +106,37 @@
             android:orientation="horizontal"
             android:paddingLeft="5dp"
             android:paddingRight="5dp">
-
             <TextView
                 android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="店铺地址："
+                android:text="负责人："
+                android:textColor="@color/colorBlack"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/et_conductorID"
+                android:layout_width="317dp"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:gravity="center"
+                android:inputType="textMultiLine"
+                android:minLines="1"
+                android:text=""
+                android:textSize="8sp" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
+            <TextView
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="GPS地址："
                 android:textColor="@color/colorBlack"
                 android:textSize="15sp" />
 
@@ -123,6 +150,7 @@
                 android:minLines="1"
                 android:text=""
                 android:textSize="7sp" />
+
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -154,32 +182,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp">
-
-            <TextView
-                android:gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="负责人："
-                android:textColor="@color/colorBlack"
-                android:textSize="15sp" />
-
-            <EditText
-                android:id="@+id/et_conductorID"
-                android:layout_width="317dp"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:gravity="center"
-                android:inputType="textMultiLine"
-                android:minLines="1"
-                android:text=""
-                android:textSize="8sp" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
             >
 
             <TextView
@@ -194,17 +196,17 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <EditText
                     android:id="@+id/et_GPSLongitude"
                     android:layout_width="100dp"
-                    android:layout_height="17dp"
+                    android:layout_height="wrap_content"
                     android:focusable="false"
                     android:gravity="center"
                     android:inputType="textMultiLine"
                     android:minLines="1"
-                    android:text=""
+                    android:text="经度"
                     android:textSize="8sp" />
 
                 <EditText
@@ -215,7 +217,7 @@
                     android:gravity="center"
                     android:inputType="textMultiLine"
                     android:minLines="1"
-                    android:text=""
+                    android:text="纬度"
                     android:textSize="8sp" />
 
             </LinearLayout>
@@ -223,9 +225,18 @@
             <Button
                 android:id="@+id/btn_gps"
                 android:layout_marginLeft="50dp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="开始定位" />
+                android:background="@drawable/shape_red_24px"
+                android:text="开始定位"
+                android:layout_width="120dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:paddingBottom="11dp"
+                android:paddingLeft="22dp"
+                android:paddingRight="22dp"
+                android:paddingTop="11dp"
+                android:textColor="#FFF"
+                android:textSize="16sp"
+                />
         </LinearLayout>
 
     </LinearLayout>
@@ -429,17 +440,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"/>
 
-            <ImageButton
-                android:id="@+id/btn_stoprecord"
-                android:layout_margin="4dp"
-                android:layout_marginRight="2dp"
-                android:layout_marginLeft="2dp"
-                android:background="@drawable/btn_photo_rectangle"
-                android:layout_weight="1"
-                android:src="@mipmap/img_btn_stoprecord"
 
-                android:layout_width="wrap_content"
-                android:layout_height="70dp" />
             <ImageButton
                 android:id="@+id/btn_startplay"
                 android:layout_margin="4dp"
@@ -471,20 +472,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-
             android:id="@+id/photo_result_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
     <Button
         android:id="@+id/btn_finish"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_width="90dp"
+        android:layout_height="45dp"
         android:layout_gravity="center"
-        android:background="@drawable/btn_finish"
-        android:text="完成"
-        android:textColor="#ffffff"
-        android:textSize="20sp" />
+        android:background="@drawable/shape_red_24px"
+        android:text="返回"
+        android:paddingBottom="11dp"
+        android:paddingLeft="22dp"
+        android:paddingRight="22dp"
+        android:paddingTop="11dp"
+        android:textColor="#FFF"
+        android:textSize="16sp"
+        android:layout_marginBottom="15dp"
+        />
 
 </LinearLayout>
 

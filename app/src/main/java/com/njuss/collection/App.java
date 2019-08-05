@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 import android.os.storage.StorageManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.njuss.collection.base.Global;
@@ -29,8 +30,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import tech.oom.idealrecorder.IdealRecorder;
+
 public class App extends Application {
 
+    private static App instance;
+    public static App getInstance() {
+        return instance;
+    }
     private GridConductor conductor = null;
 
 
@@ -39,6 +46,8 @@ public class App extends Application {
         super.onCreate();
         Context context = getApplicationContext();
         Global.context = context;
+        instance = App.this;
+        IdealRecorder.init(App.this);
         DBHelper dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Log.d("LOADING DDATA", dbHelper.getDatabaseName()+" SUCCESS！=====");
@@ -84,6 +93,14 @@ public class App extends Application {
 
         Log.d("OUTPUT PIC in :", dir.getAbsolutePath());
         return dir.getAbsolutePath();
+    }
+
+    public boolean deleteFile(String filename) {
+        if (TextUtils.isEmpty(filename)){
+            return false;
+        }
+        File file = new File(filename);
+        return  file.exists() ? file.delete() : false;
     }
 
     private static String getStoragePath(Context mContext, boolean is_removale) {

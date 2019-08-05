@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import com.njuss.collection.base.User;
 
+import java.lang.reflect.Method;
+
 import static com.njuss.collection.R.color.gray;
 import static com.njuss.collection.R.color.white;
 
@@ -37,8 +39,10 @@ public class TabHostActivity extends TabActivity {
 
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
-            actionBar.setTitle(User.getConductor().getConductorName() +"网格员烟草销售点信息维护");
-            actionBar.setBackgroundDrawable( new ColorDrawable( Color.parseColor("#0e6db1")));
+            int Listnumber=User.getFinishedList().size()+User.getUnfinishedList().size();
+            actionBar.setTitle(User.getConductor().getConductorName() +"-烟草销售点信息维护:共"+Listnumber+"点");
+            actionBar.setBackgroundDrawable( new ColorDrawable( Color.parseColor("#108ee9")));
+
         }else{
             Toast.makeText(this, "找不到标题栏", Toast.LENGTH_SHORT).show();
         }
@@ -57,8 +61,10 @@ public class TabHostActivity extends TabActivity {
         intent2.setClass(this,ListViewActivityr.class);
 
 
-        tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator("未收集").setContent(intent1));
-        tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator("已收集").setContent(intent2));
+        tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator("未收集("+User.getUnfinishedList().size()+")").setContent(intent1));
+        tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator("已收集("+User.getFinishedList().size()+")").setContent(intent2));
+       //tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator("未收集").setContent(intent1));
+      // tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator("已收集").setContent(intent2));
 
         tabHost.getTabWidget().getChildAt(0).setBackgroundResource(gray);
         tabHost.getTabWidget().getChildAt(1).setBackgroundResource(white);
