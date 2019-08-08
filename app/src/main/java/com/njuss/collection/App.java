@@ -62,10 +62,33 @@ public class App extends Application {
     /**
      * @return dir path
      */
-    public String generatePicDir() {
+    public String PicDir() {
+        String rootDir = generateDir();
+        //rootDir += "/Tobacco/Pic/";
+        File _dir = new File(rootDir, "Tobacco/Pic");
+        if(!_dir.exists())
+            if(_dir.mkdirs())
+                Log.d("GENERATE DIR ", "PicDir: SUCCESS! ======");
+            else Log.d("GENERATE DIR ", "PicDir: FAILED! ======");
+        return _dir.getAbsolutePath();
+    }
+
+    public String DataDir(){
+        String rootDir = generateDir();
+        //rootDir += "/Tobacco/Pic/";
+        File _dir = new File(rootDir, "Tobacco/Data");
+        if(!_dir.exists())
+            if(_dir.mkdirs())
+                Log.d("GENERATE DIR ", "getDataDir: SUCCESS! ======");
+            else Log.d("GENERATE DIR ", "getDataDir: FAILED! ======");
+        return _dir.getAbsolutePath();
+    }
+
+    private String generateDir(){
         String rootDir;
         FileUtil.RefStorageVolume[] volumes  = FileUtil.getVolumeList(getApplicationContext());
         Log.d("ENVIRONMENT STATE" , "==="+Environment.getExternalStorageState());
+        Log.d("Storage volumes length", String.valueOf(volumes.length));
         if (volumes.length == 1) {
             // SD媒体不可用，转为存储在本地
             File data = null;
@@ -84,15 +107,7 @@ public class App extends Application {
             }
             rootDir = dir.getAbsolutePath();
         }
-        //rootDir += "/Tobacco/Pic/";
-        File dir = new File(rootDir, "Tobacco/Pic");
-        if(!dir.exists())
-            if(dir.mkdirs())
-                Log.d("GENERATE DIR ", "generatePicDir: SUCCESS! ======");
-            else Log.d("GENERATE DIR ", "generatePicDir: FAILED! ======");
-
-        Log.d("OUTPUT PIC in :", dir.getAbsolutePath());
-        return dir.getAbsolutePath();
+        return rootDir;
     }
 
     public boolean deleteFile(String filename) {

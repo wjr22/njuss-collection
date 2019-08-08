@@ -1,17 +1,12 @@
 package com.njuss.collection;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaRecorder;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -29,11 +24,14 @@ import com.njuss.collection.base.User;
 import com.njuss.collection.beans.Store;
 import com.njuss.collection.service.CollectionService;
 import com.njuss.collection.tools.RecordPlayer;
+import com.tbruyelle.rxpermissions2.RxPermissions;
+
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
 
 /**
  * @TODO 声音录制
@@ -83,7 +81,8 @@ public class CollectActivity extends CheckPermissionsActivity implements
     private File recordFile;
     private boolean isRecordDialogShow=false;
 
-
+    // 权限
+    final RxPermissions rxPermissions = new RxPermissions(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,9 +99,10 @@ public class CollectActivity extends CheckPermissionsActivity implements
         } else {
             Log.i(TAG, "默认有录音权限");
         }*/
+        checkPremission();
         Intent intent = getIntent();
         store = (Store)intent.getSerializableExtra("store");
-        recordFile = new File(App.getInstance().generatePicDir(), store.getLicenseID()+".mp3");
+        recordFile = new File(App.getInstance().PicDir(), store.getLicenseID()+".mp3");
 
         initView();
         initListener();
@@ -110,6 +110,29 @@ public class CollectActivity extends CheckPermissionsActivity implements
         collectionService.setStore(store);
 
 
+    }
+
+    private void checkPremission(){
+
+        /*rxPermissions
+                .request(Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_CALENDAR,
+                        Manifest.permission.READ_SMS,
+                        Manifest.permission.RECORD_AUDIO,
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.SEND_SMS)
+                .subscribe(new Action1<Boolean>() {
+                    @Override
+                    public void call(Boolean aBoolean) {
+                        if (aBoolean) {
+                            //当所有权限都允许之后，返回true
+                        } else {
+                            //只要有一个权限禁止，返回false，
+                            //下一次申请只申请没通过申请的权限
+                        }
+                    }
+                });*/
     }
 
     private void initView() {
@@ -156,15 +179,15 @@ public class CollectActivity extends CheckPermissionsActivity implements
             etGPSAddress.setText(store.getGPSAddress());
         etConductorID.setText(User.getConductor().getConductorName());
         if(store.getLicensePic() != null) {
-            photoIDBtn.setImageBitmap(BitmapFactory.decodeFile(app.generatePicDir() + "/"+store.getLicensePic()));
+            photoIDBtn.setImageBitmap(BitmapFactory.decodeFile(app.PicDir() + "/"+store.getLicensePic()));
             Log.d("load pic ", store.getLicensePic());
         }
         if(store.getStorePicR() != null)
-            photoRBtn.setImageBitmap(BitmapFactory.decodeFile(app.generatePicDir()+"/"+store.getStorePicR()));
+            photoRBtn.setImageBitmap(BitmapFactory.decodeFile(app.PicDir()+"/"+store.getStorePicR()));
         if(store.getStorePicM() != null)
-            photoMBtn.setImageBitmap(BitmapFactory.decodeFile(app.generatePicDir()+"/"+store.getStorePicM()));
+            photoMBtn.setImageBitmap(BitmapFactory.decodeFile(app.PicDir()+"/"+store.getStorePicM()));
         if(store.getStorePicL() != null)
-            photoLBtn.setImageBitmap(BitmapFactory.decodeFile(app.generatePicDir()+"/"+store.getStorePicL()));
+            photoLBtn.setImageBitmap(BitmapFactory.decodeFile(app.PicDir()+"/"+store.getStorePicL()));
 
     }
 
@@ -181,6 +204,13 @@ public class CollectActivity extends CheckPermissionsActivity implements
 
         startPlay.setOnClickListener(this);
         stopPlay.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        int r = CollectionService.calcComplete(store);
+        this.integrity.setText(r+"%");
     }
 
     @Override
@@ -210,7 +240,7 @@ public class CollectActivity extends CheckPermissionsActivity implements
                 stopplayer();
                 break;
             case R.id.btn_finish:
-                //uploadData();
+                uploadData();
                 Intent intent1 = new Intent(CollectActivity.this, TabHostActivity.class);
                 startActivity(intent1);
                 break;
@@ -257,6 +287,7 @@ public class CollectActivity extends CheckPermissionsActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         Bitmap result = null;
         String fileName = store.getLicenseID();
+        // 相机暂存
         if (requestCode == REQUEST_CODE_1) {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 result = data.getParcelableExtra("data");
@@ -302,7 +333,7 @@ public class CollectActivity extends CheckPermissionsActivity implements
             //本地暂存
             FileOutputStream fos = null;
             App app = (App) getApplication();
-            File file = new File(app.generatePicDir(), fileName);
+            File file = new File(app.PicDir(), fileName);
             try {
                 fos = new FileOutputStream(file);
                 result.compress(Bitmap.CompressFormat.JPEG, 100, fos);
@@ -312,7 +343,7 @@ public class CollectActivity extends CheckPermissionsActivity implements
                 try {
                     fos.flush();
                     fos.close();
-                    Log.d("OUTPUT PIC ==", file.getAbsolutePath()+file.getName());
+                    Log.d("OUTPUT PIC ==", file.getAbsolutePath());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -320,6 +351,7 @@ public class CollectActivity extends CheckPermissionsActivity implements
 
         }
 
+        /* GPS 返回 */
         if(requestCode == 100 && resultCode == 101){
             String Longitute = data.getStringExtra("GPSLongitude");
             String GPSLatitude=data.getStringExtra("GPSLatitude");
@@ -364,7 +396,7 @@ public class CollectActivity extends CheckPermissionsActivity implements
     private void playRecording() {
         Toast.makeText(this, "播放录音"+recordFile, Toast.LENGTH_SHORT).show();
         //更新存储卡文件   没用
-        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(App.getInstance().generatePicDir() +'/'+ store.getLicenseID()+".mp3")));
+        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(App.getInstance().PicDir() +'/'+ store.getLicenseID()+".mp3")));
 
         player.playRecordFile(recordFile);
     }

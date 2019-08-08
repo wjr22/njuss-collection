@@ -1,4 +1,4 @@
-package com.njuss.collection;
+package com.njuss.collection.base;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -16,6 +16,8 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
+import com.njuss.collection.R;
 import com.njuss.collection.tools.ScreenUtils;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;

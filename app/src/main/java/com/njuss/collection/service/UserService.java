@@ -9,7 +9,9 @@ import com.njuss.collection.base.User;
 import com.njuss.collection.beans.GridConductor;
 import com.njuss.collection.beans.Store;
 import com.njuss.collection.tools.DBHelper;
+import com.njuss.collection.tools.FileUtil;
 
+import java.io.FileWriter;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -121,5 +123,11 @@ public class UserService {
         return false;
     }
 
-
+    public void exportToCsv(String file) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        //db.query("tStores",null, "conductorID=?", new String[]{conductor.getConductorID().toString()},null,null,null);
+        Cursor cursor = db.rawQuery("select * from tStores where conductorID = ?", new String[]{conductor.getConductorID().toString()});
+        Log.d("CURSOR----", String.valueOf(cursor.getCount()));
+        FileUtil.ExportToCSV(cursor,file);
+    }
 }

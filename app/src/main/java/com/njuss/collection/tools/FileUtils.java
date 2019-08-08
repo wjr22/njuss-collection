@@ -25,7 +25,7 @@ public class FileUtils {
      * 获取缓存文件地址
      */
     public static String getCacheFilePath(String fileName){
-        filePath = App.getInstance().generatePicDir() +'/'+ fileName;
+        filePath = App.getInstance().PicDir() +'/'+ fileName;
        // filePath = cacheDir.getAbsolutePath() + fileName;
         File file = new File(filePath);
         if (!file.exists()) {

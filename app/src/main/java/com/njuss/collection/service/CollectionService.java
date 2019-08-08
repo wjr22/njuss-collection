@@ -67,22 +67,22 @@ public class CollectionService {
     }
 
     public static int calcComplete(Store store){
-        int res = 0;
+        double res = 0;
         if(store.getGPSAddress() != null)
-            res += 17;
+            res += 14.28;
         if(store.getGPSLatitude() != null)
-            res += 17;
+            res += 14.28;
         if(store.getGPSLongitude() != null)
-            res += 17;
+            res += 14.28;
         if(store.getStorePicL() != null)
-            res += 17;
+            res += 14.28;
         if(store.getStorePicM() != null)
-            res += 17;
+            res += 14.28;
         if(store.getStorePicR() != null)
-            res += 17;
+            res += 14.28;
         if(store.getLicensePic() != null)
-            res += 17;
-        store.setComplete(res);
+            res += 14.28;
+        store.setComplete((int)res);
         return store.getComplete();
     }
 

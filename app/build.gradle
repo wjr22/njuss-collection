@@ -15,17 +15,11 @@ android {
             keyPassword 'collection'
         }
     }
-    //指定jdk版本
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
     compileSdkVersion 29
 
     defaultConfig {
         applicationId "com.njuss.collection"
-        minSdkVersion 23
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -47,6 +41,10 @@ android {
     packagingOptions {
         exclude 'META-INF/NOTICE.txt' // will not include NOTICE file
         exclude 'META-INF/LICENSE.txt' // will not include LICENSE file
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     buildTypes {
@@ -89,5 +87,8 @@ dependencies {
     implementation 'io.reactivex:rxjava:1.2.1'
     implementation 'io.reactivex:rxandroid:1.2.0'
     implementation 'com.mylhyl:acp:1.1.7'
+    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
+
+    implementation 'com.github.d-max:spots-dialog:1.1@aar'
   }
 

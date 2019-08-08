@@ -1,11 +1,9 @@
 package com.njuss.collection;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.wifi.WifiManager;
@@ -34,23 +32,21 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.services.core.LatLonPoint;
-import com.amap.api.services.geocoder.GeocodeQuery;
 import com.amap.api.services.geocoder.GeocodeResult;
 import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.RegeocodeAddress;
 import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.amap.api.services.geocoder.RegeocodeResult;
+import com.njuss.collection.dialog.UsualDialogger;
 import com.njuss.collection.tools.Utils;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
+import dmax.dialog.SpotsDialog;
 
 import static com.amap.api.col.n3.id.a;
 
 public class GaodeLocationActivity extends AppCompatActivity implements LocationSource,
-        AMap.OnMapLongClickListener,AMap.OnMarkerDragListener,AMap.OnMapClickListener,AMapLocationListener, AMap.OnMarkerClickListener {
+        AMap.OnMapLongClickListener,AMap.OnMarkerDragListener,AMap.OnMapClickListener,AMapLocationListener, AMap.OnMarkerClickListener,
+UsualDialogger.onConfirmClickListener, UsualDialogger.onCancelClickListener {
 
     private MapView mapView;
 
@@ -83,6 +79,11 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
     private int t=0;
     private Double accuracy = 1000.0; //精度
 
+    UsualDialogger dialogger = null;
+    UsualDialogger dialogger2 = null;
+
+    SpotsDialog dialog = null;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -94,6 +95,8 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gaode_location);
+        dialog = (SpotsDialog) new SpotsDialog.Builder().setContext(GaodeLocationActivity.this).build();
+        dialog.show();
         tv_latitude = (TextView) findViewById(R.id.txt_latitude);
         tv_location = (TextView) findViewById(R.id.txt_location);
         tv_longtitude = (TextView) findViewById(R.id.txt_longitude);
@@ -134,9 +137,27 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
         // 销毁地图
         mapView.onDestroy();
     }
+
+    /**
+     * 按返回键
+     */
     @Override
     public void onBackPressed() {
-        onDestroy();
+        if(location == null){
+            // 点击标记
+            UsualDialogger dialogger = UsualDialogger.Builder(this)
+                    .setTitle("定位提示")
+                    .setMessage("还未完成定位！ 请勿离开！")
+                    .setOnConfirmClickListener("确定", new UsualDialogger.onConfirmClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                        }
+                    })
+                    .build().shown();
+
+        }else{
+            super.onBackPressed();
+        }
     }
     /**
      * 重写此方法，在activity执行onSaveInstanceState时执行mMapView.onSaveInstanceState (outState)，保存地图当前的状态
@@ -271,6 +292,7 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
                     aMapLocation.getGpsAccuracyStatus(); // 获取GPS的当前状态
                     location = aMapLocation.getAddress()+aMapLocation.getPoiName();
                     if (!control && t == 8) {
+                        dialog.cancel();
                         Toast.makeText(GaodeLocationActivity.this, "定位完成", Toast.LENGTH_LONG).show();
                         updateView(GPSLatitude, GPSLongitude, location, String.valueOf(accuracy));
                         control = true;
@@ -278,7 +300,14 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
                 } else {
                     if(t>8 && !control) {
                         // 设置手动档
-                        Toast.makeText(GaodeLocationActivity.this, "定位精度不够，请手动选择点！", Toast.LENGTH_LONG).show();
+                        // 点击标记
+                        dialog.cancel();
+                        dialogger = UsualDialogger.Builder(this)
+                                .setTitle("定位提示")
+                                .setMessage("定位精度不够，请手动在地图上选择地点！\n提示：可以拖动悬针，只能选择1个位置，并且再次点击悬针确定！")
+                                .setOnConfirmClickListener("确定", this)
+                                .build().shown();
+
                         manual = true;
                         control = true;
                     }
@@ -387,21 +416,27 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
         // 拖拽结束
         LatLng ll = marker.getPosition();
         getLocation(ll);
-        Log.d("======", "marker drag end[==");
     }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
         // 点击标记
-        new AlertDialog.Builder(this).setTitle("手动选点")
-                .setMessage("是否选择该点？\n 地址：")
-                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+        //new AlertDialog.Builder(this).setTitle("手动选点")
+        //        .setMessage("是否选择该点？\n 地址：" + location)
+        //        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        //            @Override
+        //            public void onClick(DialogInterface dialogInterface, int i) {
 
-                    }
-                })
-                .setNegativeButton("cancel",null).show();
+        //            }
+        //        })
+        //        .setNegativeButton("取消",null).show();
+        dialogger2 = UsualDialogger.Builder(this)
+                .setTitle("定位提示")
+                .setMessage("是否选择该点？\n 地址："+location)
+                .setOnConfirmClickListener("确定", this)
+                .setOnCancelClickListener("取消", this)
+                .build().shown();
+
         return false;
     }
 
@@ -430,7 +465,7 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
                // address.append(aMapLocation.getBuildingId()); // 获取当前室内定位的建筑物Id
                // address.append(aMapLocation.getFloor()); // 获取当前室内定位的楼层
                 res[0] = aMapLocation.getFormatAddress();
-                Log.d("======", res[0]);
+                Log.d("====== location", res[0]);
                 updateView(String.valueOf(ll.latitude), String.valueOf(ll.longitude), res[0], "无");
             }
 
@@ -456,5 +491,15 @@ public class GaodeLocationActivity extends AppCompatActivity implements Location
         this.location = location;
         this.GPSLongitude = GPSLongitude;
         this.GPSLatitude = GPSLatitude;
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(dialogger != null) {
+            dialogger.cancel();
+        }
+        if(dialogger2 != null){
+            dialogger2.cancel();
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.njuss.collection;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
@@ -25,6 +26,7 @@ import com.njuss.collection.beans.Store;
 import com.njuss.collection.service.UserService;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -41,8 +43,19 @@ public class ListViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tab1);
         lv = findViewById(R.id.list_view);
+        UserService userService = new UserService(getApplicationContext());
+        userService.setMap();
+        User.setUnfinished(userService.unfinished);
         //1.数据准备
         data = User.getUnfinishedList();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            data.sort(new Comparator<Store>() {
+                @Override
+                public int compare(Store t0, Store t1) {
+                    return t0.getLicenseID().compareTo(t1.getLicenseID());
+                }
+            });
+        }
         //2.创建自定义适配器
         mba = new MyBaseAdapt((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE));
         //3.为listView设置适配器
@@ -135,5 +148,7 @@ public class ListViewActivity extends AppCompatActivity {
             return v;
         }
     }
+
+
 
 }

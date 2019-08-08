@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import com.mylhyl.acp.Acp;
 import com.mylhyl.acp.AcpListener;
 import com.mylhyl.acp.AcpOptions;
+import com.njuss.collection.base.BaseDialogFragment;
 import com.njuss.collection.beans.Store;
 import com.njuss.collection.tools.DateUtils;
 import com.njuss.collection.tools.FileUtils;
@@ -31,8 +32,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import tech.oom.idealrecorder.IdealRecorder;
 import tech.oom.idealrecorder.StatusListener;
 import www.linwg.org.lib.LCardView;
-
-import static com.njuss.collection.tools.FileUtils.deleteFile;
 
 public class RecordDialogFragment extends BaseDialogFragment {
 
@@ -176,7 +175,7 @@ public class RecordDialogFragment extends BaseDialogFragment {
         fileName = store.getLicenseID() + ".mp3";//*************
 
         //如果需要保存录音文件  设置好保存路径就会自动保存  也可以通过onRecordData 回调自己保存  不设置 不会保存录音
-        idealRecorder.setRecordFilePath(App.getInstance().generatePicDir() +'/'+ fileName);
+        idealRecorder.setRecordFilePath(App.getInstance().PicDir() +'/'+ fileName);
         //设置录音配置 最长录音时长 以及音量回调的时间间隔
         idealRecorder.setRecordConfig(recordConfig).setMaxRecordTime(Integer.MAX_VALUE).setVolumeInterval(200);
         //设置录音时各种状态的监听
@@ -295,7 +294,7 @@ public class RecordDialogFragment extends BaseDialogFragment {
 
      */
     private void notifyServerStatus(){
-        Toast.makeText(mContext, "录音采集成功，文件路径->" + App.getInstance().generatePicDir()+'/'+fileName, Toast.LENGTH_LONG).show();
+        Toast.makeText(mContext, "录音采集成功，文件路径->" + App.getInstance().PicDir()+'/'+fileName, Toast.LENGTH_LONG).show();
         notifyServerSuccess();
 //        notifyServerFails("录音发送失败！");
     }

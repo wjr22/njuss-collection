@@ -3,9 +3,11 @@ package com.njuss.collection.tools;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.njuss.collection.base.Global;
 import com.njuss.collection.beans.District;
 
 import java.io.IOException;
@@ -41,97 +43,21 @@ public class UploadData {
      */
     public void insertForTest(){
 
-
         ContentValues contentValues = new ContentValues();      // 插入用户
-        contentValues.put("conductorMobile","18051072519");
-        contentValues.put("conductorName","王家若");
-        contentValues.put("conductorPwd","18051072519");
-        long id = db.insert("tGridConductor",null,contentValues);
-        Log.d("DB Operate", "insert into tGridConductor "+id + " success!========");
-        ContentValues storeValues = new ContentValues();        //插入商户
-        storeValues.put("conductorID", id);
-        storeValues.put("licenseID", "111110000011");
-        storeValues.put("storeName", "王家若的小店");
-        long IDl = db.insert("tStores", null, storeValues);
-        Log.d("DB Operate", "insert into tStores "+ IDl + " Success!========");
+        contentValues.put("conductorMobile", "18051072519");
+        contentValues.put("conductorName", "王家若");
+        contentValues.put("conductorPwd", "18051072519");
+        long id = db.insert("tGridConductor", null, contentValues);
+        Log.d("DB Operate", "insert into tGridConductor " + id + " success!========");
 
-        ContentValues contentValues2 = new ContentValues();      // 插入用户
-        contentValues.put("conductorMobile","13573318455");
-        contentValues.put("conductorName","朱晓悦");
-        contentValues.put("conductorPwd","13573318455");
-        long id2 = db.insert("tGridConductor",null,contentValues);
-        Log.d("DB Operate", "insert into tGridConductor "+id + " success!========");
-        ContentValues storeValues2 = new ContentValues();        //插入商户
-        storeValues.put("conductorID", id);
-        storeValues.put("licenseID", "111110011172");
-        storeValues.put("storeName", "朱晓悦的小店");
-        long IDl2 = db.insert("tStores", null, storeValues);
-        Log.d("DB Operate", "insert into tStores "+ IDl + " Success!========");
-
-        ContentValues contentValues3 = new ContentValues();      // 插入用户
-        contentValues.put("conductorMobile","123456789");
-        contentValues.put("conductorName","魏朝阳");
-        contentValues.put("conductorPwd","123456789");
-        long id3 = db.insert("tGridConductor",null,contentValues);
-        Log.d("DB Operate", "insert into tGridConductor "+id + " success!========");
-        ContentValues storeValues3 = new ContentValues();        //插入商户
-        storeValues.put("conductorID", id);
-        storeValues.put("licenseID", "110000011127");
-        storeValues.put("storeName", "魏朝阳的小店");
-        long IDl3 = db.insert("tStores", null, storeValues);
-        Log.d("DB Operate", "insert into tStores "+ IDl + " Success!========");
-
-        ContentValues contentValues4 = new ContentValues();      // 插入用户
-        contentValues.put("conductorMobile","987654321");
-        contentValues.put("conductorName","daisy");
-        contentValues.put("conductorPwd","123456789");
-        long id4 = db.insert("tGridConductor",null,contentValues);
-        Log.d("DB Operate", "insert into tGridConductor "+id + " success!========");
-        ContentValues storeValues4 = new ContentValues();        //插入商户
-        storeValues.put("conductorID", id);
-        storeValues.put("licenseID", "111110011127");
-        storeValues.put("storeName", "daisy的小店");
-        long IDl4 = db.insert("tStores", null, storeValues);
-        Log.d("DB Operate", "insert into tStores "+ IDl + " Success!========");
-        ContentValues contentValues5 = new ContentValues();      // 插入用户
-        contentValues.put("conductorMobile","9876543211");
-        contentValues.put("conductorName","daisy1");
-        contentValues.put("conductorPwd","123456789");
-        long id5 = db.insert("tGridConductor",null,contentValues);
-        Log.d("DB Operate", "insert into tGridConductor "+id + " success!========");
-        ContentValues storeValues5 = new ContentValues();        //插入商户
-        storeValues.put("conductorID", id);
-        storeValues.put("licenseID", "110011011127");
-        storeValues.put("storeName", "daisy1的小店");
-        long IDl5= db.insert("tStores", null, storeValues);
-        Log.d("DB Operate", "insert into tStores "+ IDl + " Success!========");
-
-        ContentValues contentValues6 = new ContentValues();      // 插入用户
-        contentValues.put("conductorMobile","9876543221");
-        contentValues.put("conductorName","daisy2");
-        contentValues.put("conductorPwd","123456789");
-        long id6 = db.insert("tGridConductor",null,contentValues);
-        Log.d("DB Operate", "insert into tGridConductor "+id + " success!========");
-        ContentValues storeValues6 = new ContentValues();        //插入商户
-        storeValues.put("conductorID", id);
-        storeValues.put("licenseID", "111111011127");
-        storeValues.put("storeName", "daisy2的小店");
-        long IDl6 = db.insert("tStores", null, storeValues);
-        Log.d("DB Operate", "insert into tStores "+ IDl + " Success!========");
-
-        ContentValues contentValues7 = new ContentValues();      // 插入用户
-        contentValues.put("conductorMobile","9876543231");
-        contentValues.put("conductorName","daisy3");
-        contentValues.put("conductorPwd","123456789");
-        long id7 = db.insert("tGridConductor",null,contentValues);
-        Log.d("DB Operate", "insert into tGridConductor "+id + " success!========");
-        ContentValues storeValues7 = new ContentValues();        //插入商户
-        storeValues.put("conductorID", id);
-        storeValues.put("licenseID", "111110011127");
-        storeValues.put("storeName", "daisy3的小店");
-        long IDl7 = db.insert("tStores", null, storeValues);
-        Log.d("DB Operate", "insert into tStores "+ IDl + " Success!========");
-
+        for(int i=0; i< 35; i++) {
+            ContentValues storeValues = new ContentValues();        //插入商户
+            storeValues.put("conductorID", id);
+            storeValues.put("licenseID", "201800000000"+i);
+            storeValues.put("storeName", "王家若的小店"+i);
+            long IDl = db.insert("tStores", null, storeValues);
+            Log.d("DB Operate", "insert into tStores " + IDl + " Success!========");
+        }
     }
 
     /**
@@ -157,6 +83,58 @@ public class UploadData {
         }
     }
 
+    public Boolean insertConductor(Context context, InputStream in, String fileName){
+        Boolean b = false;
+        try {
+            List<String[]> ls = FileUtil.readExcel(fileName, in);
+            // TODO 检查第一行
+
+            for (int i=1; i<ls.size(); i++){
+                String[] t = ls.get(i);
+                ContentValues cv = new ContentValues();
+                for (int j=1; j<t.length; j++){
+                    cv.put(Global.ConductorFieldNames[j], t[j]);
+                }
+                db.insert("tGridConductor", null, cv);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return b;
+    }
+
+    public Boolean insertStore(Context context, InputStream in, String fileName){
+        Boolean b = false;
+        try {
+            List<String[]> ls = FileUtil.readExcel(fileName, in);
+            // TODO 检查第一行
+
+            for (int i=1; i<ls.size(); i++){
+                String[] t = ls.get(i);
+                ContentValues cv = new ContentValues();
+                Cursor u = db.query("tGridConductor", new String[]{Global.ConductorFieldNames[0]}, "conductorName=?", new String[]{t[1]}, null, null, null);
+                if(u.getCount() == 1){
+                    u.moveToFirst();
+                    int id = u.getInt(u.getColumnIndex(Global.ConductorFieldNames[0]));
+                    ContentValues storeValues = new ContentValues();        //插入商户
+                    storeValues.put("conductorID", id);
+                    storeValues.put("licenseID", t[0]);
+                    storeValues.put("storeName", t[2]);
+                    storeValues.put("storeAddress", t[3]);
+                    long IDl = db.insert("tStores", null, storeValues);
+                    Log.d("DB Operate", "insert into tStores " + IDl + " Success!========");
+                    db.insert("tStores", null, cv);
+                }else
+                    return false;
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return b;
+    }
+
 
 
     public void dataInit(){
@@ -171,6 +149,7 @@ public class UploadData {
     }
 
     public void readFromExcel(){ }
+
 
     public static class Builder{
 

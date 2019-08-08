@@ -1,20 +1,15 @@
 package com.njuss.collection.tools;
 import java.io.File;
 
-import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
-import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.njuss.collection.App;
-import com.njuss.collection.CollectActivity;
 
 public class RecordPlayer {
     private static MediaPlayer mediaPlayer;
@@ -28,7 +23,7 @@ public class RecordPlayer {
     // 播放录音文件
     public void playRecordFile(File file) {
 
-        this.mcontext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(App.getInstance().generatePicDir())));
+        this.mcontext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(App.getInstance().PicDir())));
 
 
         if (file.exists() && file != null) {

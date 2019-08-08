@@ -12,6 +12,7 @@ import com.njuss.collection.tools.UploadData;
 
 /**
  * 个人中心
+ * @since v1.0
  */
 public class PersonalCenterActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -49,7 +50,7 @@ public class PersonalCenterActivity extends AppCompatActivity implements View.On
 
                 break;
             case R.id.btn_output:
-                upload.exportToExcel();
+                //.exportToCsv();
                 break;
         }
     }
